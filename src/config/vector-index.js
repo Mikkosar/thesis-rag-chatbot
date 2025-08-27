@@ -1,8 +1,6 @@
 const { MongoClient } = require("mongodb");
 
-const client = new MongoClient(
-  "mongodb+srv://mikkosar:Pkh8tfdJDlBGLND9@thesis-chatbot-cluster.eyi4zmw.mongodb.net/chatbot-cluster?retryWrites=true&w=majority&appName=thesis-chatbot-cluster"
-);
+const client = new MongoClient("Oma MongoDB URI tähän");
 
 async function run() {
   try {
