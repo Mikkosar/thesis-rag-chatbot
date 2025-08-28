@@ -1,10 +1,18 @@
-import mongoose from "mongoose";
+import mongoose, { Document, Model } from "mongoose";
 const { Schema } = mongoose;
 
-const UserSchema = new Schema({
+interface IUser extends Document {
+    firstName: string;
+    lastName: string;
+    password: string;
+    email: string;
+    createdAt: Date;
+}
+
+const UserSchema = new Schema<IUser>({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
-  passwordHash: { type: String, required: true },
+  password: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   createdAt: { type: Date, default: Date.now },
 });
@@ -17,5 +25,5 @@ UserSchema.set("toJSON", {
     },
 });
 
-const User = mongoose.model("User", UserSchema);
+const User: Model<IUser> = mongoose.model<IUser>("User", UserSchema);
 export default User;
