@@ -29,7 +29,6 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    console.log("TAALLA");
     console.log(req.body);
     const { title, content } = req.body;
 
@@ -49,6 +48,52 @@ router.post("/", async (req, res) => {
     return res.status(201).json(savedChunk);
   } catch (error) {
     console.error("Error creating chunk:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  try {
+    const chunk = await Chunk.findByIdAndDelete(req.params.id);
+    if (chunk) {
+      return res.status(204).send();
+    }
+    return res.status(404).json({ error: "Chunk not found" });
+  } catch (error) {
+    console.error("Error deleting chunk:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.put("/:id", async (req, res) => {
+  try {
+    const { title, content } = req.body;
+
+    if (!title && !content) {
+      return res.status(400).json({ error: "Title or content are required" });
+    }
+
+    if (content) {
+      const embedding = await getEmbedding(content);
+
+      const chunk = await Chunk.findByIdAndUpdate(
+        req.params.id,
+        { title, content, embedding },
+        { new: true }
+      );
+
+      return res.json(chunk);
+
+    } else {
+      const chunk = await Chunk.findByIdAndUpdate(
+        req.params.id,
+        { title, content },
+        { new: true }
+      );
+      return res.json(chunk);
+      }
+  } catch (error) {
+    console.error("Error updating chunk:", error);
     return res.status(500).json({ error: "Internal server error" });
   }
 });
