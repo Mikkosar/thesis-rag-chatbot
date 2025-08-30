@@ -27,20 +27,19 @@ router.post("/login", async (req: Request, res: Response) => {
     }
 
     const forToken = {
+      id: user._id,
       email: user.email,
       password: user.password,
     };
 
     const token = jwt.sign(forToken, jwtSecret, { expiresIn: 60 * 60 }); // Token valid for 1 hour
 
-    return res
-      .status(200)
-      .json({
-        token: token,
-        userId: user._id,
-        firstname: user.firstName,
-        email: user.email,
-      });
+    return res.status(200).json({
+      token: token,
+      userId: user._id,
+      firstname: user.firstName,
+      email: user.email,
+    });
   } catch (error) {
     console.error("Error processing user route:", error);
     return res.status(500).json({ error: "Internal server error" });

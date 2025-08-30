@@ -4,16 +4,16 @@ import { ChatMessages, AssistantMessage } from "../types/chatTypes";
 import { TextPart } from "ai"; // jos ai-kirjasto exportoi tämän
 import ChatLog from "../models/chatLog";
 import User from "../models/user";
+import { optionalVerifyToken } from "@/middleware/auth";
 
 const router = express.Router();
 
-router.post("/", async (req: Request, res: Response) => {
+router.post("/", optionalVerifyToken, async (req: Request, res: Response) => {
   try {
     const {
       messages,
-      userId,
       chatLogId,
-    }: { messages: ChatMessages; userId: string; chatLogId: string } = req.body;
+    }: { messages: ChatMessages; chatLogId: string } = req.body;
 
     if (!messages) {
       return res.status(400).json({ error: "Query is required" });
@@ -35,7 +35,8 @@ router.post("/", async (req: Request, res: Response) => {
 
     const updatedMessages: ChatMessages = [...messages, assistantResponse];
 
-    if (userId) {
+    if (req.user) {
+      const userId = req.user.id;
       if (chatLogId) {
         const newQueryAndResponse = [
           messages[messages.length - 1],
@@ -55,11 +56,11 @@ router.post("/", async (req: Request, res: Response) => {
         });
         await newChatLog.save();
         await User.findByIdAndUpdate(userId, {
-          $push: { chatLogs: newChatLog._id },
+          $push: { chatLogs: newChatLog.id },
         });
         return res.json({
           messages: updatedMessages,
-          chatLogId: newChatLog._id,
+          chatLogId: newChatLog.id,
         });
       }
     }
