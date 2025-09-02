@@ -7,7 +7,7 @@ export default function Navbar() {
       <div className="mx-auto flex max-w-7xl items-center justify-between">
         <div className="flex space-x-6">
           <Link
-            to="/data"
+            to="/"
             className="text-white font-medium hover:text-gray-300 transition"
           >
             Data
