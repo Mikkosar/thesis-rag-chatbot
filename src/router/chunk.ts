@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get("/", async (_req, res) => {
   try {
-    const chunks = await Chunk.find({});
+    const chunks = await Chunk.find({}).select("-embedding");
     return res.json(chunks);
   } catch (error) {
     console.error("Error fetching chunks:", error);
@@ -83,7 +83,6 @@ router.put("/:id", async (req, res) => {
       );
 
       return res.json(chunk);
-
     } else {
       const chunk = await Chunk.findByIdAndUpdate(
         req.params.id,
@@ -91,7 +90,7 @@ router.put("/:id", async (req, res) => {
         { new: true }
       );
       return res.json(chunk);
-      }
+    }
   } catch (error) {
     console.error("Error updating chunk:", error);
     return res.status(500).json({ error: "Internal server error" });

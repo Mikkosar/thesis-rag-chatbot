@@ -19,10 +19,7 @@ router.post("/", optionalVerifyToken, async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Query is required" });
     }
 
-    const MAX_HISTORY = 4;
-    const recentMessages = messages.slice(-MAX_HISTORY);
-
-    const response = await getChatCompeletion(recentMessages);
+    const response = await getChatCompeletion(messages);
 
     const answer = response.steps[1]
       ? (response.steps[1].content[0] as TextPart).text // toolia käytetty
@@ -65,7 +62,7 @@ router.post("/", optionalVerifyToken, async (req: Request, res: Response) => {
       }
     }
 
-    return res.json({ messages: updatedMessages });
+    return res.json({ assistantResponse });
   } catch (error) {
     console.error("Error processing chat:", error);
     return res.status(500).json({ error: "Internal server error" });

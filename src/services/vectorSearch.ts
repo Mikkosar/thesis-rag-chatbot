@@ -13,8 +13,8 @@ export const findInformation = async (
           index: "vector_index",
           path: "embedding",
           queryVector: embedding,
-          numCandidates: 5,
-          limit: 3,
+          numCandidates: 10,
+          limit: 5,
         },
       },
       {
