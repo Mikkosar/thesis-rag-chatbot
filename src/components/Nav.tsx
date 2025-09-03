@@ -18,6 +18,12 @@ export default function Navbar() {
           >
             Chat
           </Link>
+          <Link
+            to="/stream"
+            className="text-white font-medium hover:text-gray-300 transition"
+          >
+            Stream
+          </Link>
         </div>
       </div>
     </nav>

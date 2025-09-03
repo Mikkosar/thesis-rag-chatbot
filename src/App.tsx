@@ -9,6 +9,7 @@ import Chat from "./components/Chat/Chat";
 import { useEffect } from "react";
 import { initializeChunks } from "./reducer/dataReducer";
 import { useAppDispatch } from "./hook";
+import StreamChat from "./components/Chat/StreamChat";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -27,6 +28,7 @@ function App() {
           <Route path="/edit/:id" element={<EditDataForm />} />
           <Route path="/create" element={<CreateData />} />
           <Route path="/chat" element={<Chat />} />
+          <Route path="/stream" element={<StreamChat />} />
         </Routes>
       </div>
     </Router>
