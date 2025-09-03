@@ -52,6 +52,7 @@ export const verifyToken = async (
 ) => {
   try {
     const token = req.header("Authorization")?.split(" ")[1];
+    console.log("taalla");
 
     if (!token) {
       return next();

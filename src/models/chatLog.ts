@@ -1,8 +1,9 @@
-import mongoose, { Document, Model } from "mongoose";
+import { IMessage } from "@/types/chatLogTypes";
+import mongoose, { Model } from "mongoose";
 const { Schema } = mongoose;
 
-interface IChatLog extends Document {
-  messages: { role: string; content: string }[];
+export interface IChatLog extends Document {
+  messages: IMessage[];
   createdAt: Date;
   userId: mongoose.Types.ObjectId;
 }
@@ -10,13 +11,23 @@ interface IChatLog extends Document {
 const ChatLogSchema = new Schema<IChatLog>({
   messages: [
     {
-      _id: false,
-      role: { type: String, required: true },
-      content: { type: String, required: true },
+      id: { type: String, required: true },
+      role: {
+        type: String,
+        enum: ["user", "assistant", "system"],
+        required: true,
+      },
+      metadata: { type: Schema.Types.Mixed, default: undefined },
+      parts: [
+        {
+          type: { type: String, enum: ["text"], required: true },
+          text: { type: String, required: true },
+        },
+      ],
     },
   ],
   createdAt: { type: Date, default: Date.now },
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
 });
 
 ChatLogSchema.set("toJSON", {

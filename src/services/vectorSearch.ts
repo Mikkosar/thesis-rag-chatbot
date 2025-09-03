@@ -5,6 +5,7 @@ import { SearchHits } from "../types/vectorSearchTypes";
 export const findInformation = async (
   latestQuery: string
 ): Promise<SearchHits> => {
+  console.log("Finding information for query:", latestQuery);
   const embedding = await getEmbedding(latestQuery);
   try {
     const agg = [
@@ -28,7 +29,6 @@ export const findInformation = async (
       },
     ];
     const result = await Chunk.aggregate(agg);
-    console.log("2. Tieto haettu tietokannasta:", result);
     return result;
   } catch (error) {
     console.error("Error fetching information:", error);
