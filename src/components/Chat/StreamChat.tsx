@@ -7,7 +7,7 @@ const baseURL = import.meta.env.VITE_BASE_URL;
 export default function StreamChat() {
   const [chatLogId, setChatLogId] = useState<string>("");
   const [input, setInput] = useState<string>("");
-  
+
   const chatLogIdRef = useRef(chatLogId);
 
   // aina kun state päivittyy, päivitä ref
@@ -19,21 +19,21 @@ export default function StreamChat() {
     transport: new DefaultChatTransport({
       api: `${baseURL}/chat/stream`,
       headers: {
-        authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YjAwMjFhNzUwZDk4YWY1MGQ2MjU1MSIsImVtYWlsIjoiam9obmRvZUBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCQ4SUZ2bzkvTlpFSURVb0pCUE5sTVVPamRZRDF3RElKN1I3SDlMcW1uSkxrWEE1dTlTd3kudSIsImlhdCI6MTc1NzMzODkxNCwiZXhwIjoxNzU3MzQyNTE0fQ.9CR2WUlqnqhPP-cAgCkU_fE8rJekxY5Ry1KjA8zraxo`,
+        //authorization: `Bearer `,
       },
       body: () => ({
         chatLogId: chatLogIdRef.current, // aina tuore arvo
       }),
     }),
-      onData: (dataPart) => {
-        console.log("Received data part:", dataPart.data);
-        // Type assertion to tell TypeScript what properties exist
-        const data = dataPart.data as { chatLogId?: string };
-        console.log("Data part chatLogId:", data?.chatLogId);
-        if (data && data.chatLogId) {
-          setChatLogId(data.chatLogId);
-        }
-},
+    onData: (dataPart) => {
+      console.log("Received data part:", dataPart.data);
+      // Type assertion to tell TypeScript what properties exist
+      const data = dataPart.data as { chatLogId?: string };
+      console.log("Data part chatLogId:", data?.chatLogId);
+      if (data && data.chatLogId) {
+        setChatLogId(data.chatLogId);
+      }
+    },
   });
 
   const handleSendMessage = async (e: React.FormEvent) => {
