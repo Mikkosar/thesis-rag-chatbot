@@ -11,19 +11,13 @@ export interface IChatLog extends Document {
 const ChatLogSchema = new Schema<IChatLog>({
   messages: [
     {
-      id: { type: String, required: true },
+      _id: { type: Schema.Types.ObjectId, auto: true },
       role: {
         type: String,
         enum: ["user", "assistant", "system"],
         required: true,
       },
-      metadata: { type: Schema.Types.Mixed, default: undefined },
-      parts: [
-        {
-          type: { type: String, enum: ["text"], required: true },
-          text: { type: String, required: true },
-        },
-      ],
+      content: { type: String, required: true },
     },
   ],
   createdAt: { type: Date, default: Date.now },

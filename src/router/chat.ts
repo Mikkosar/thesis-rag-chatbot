@@ -1,78 +1,67 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import "dotenv/config";
-import { getChatCompeletion } from "../services/chat";
-import { ChatMessages, AssistantMessage } from "../types/chatTypes";
+import { getChatCompeletion } from "../services/GenerateChat/chat";
 import {
   createUIMessageStream,
   pipeUIMessageStreamToResponse,
-  TextPart,
   UIMessage,
-} from "ai"; // jos ai-kirjasto exportoi tämän
+} from "ai";
 import ChatLog from "../models/chatLog";
 import User from "../models/user";
 import { optionalVerifyToken } from "@/middleware/auth";
 import { getStreamText } from "@/services/streamChat";
 
+import type { IChatMessage, IChatMessages, IMessage } from "@/types/chatLogTypes";
+import { assert } from "@/utils/assert";
+import saveChatLog from "@/services/GenerateChat/saveChatLog";
+
 const router = express.Router();
 
-router.post("/", optionalVerifyToken, async (req: Request, res: Response) => {
+export const getModelResponse = async (messages: IChatMessages, next: NextFunction) => {
+  const response = await getChatCompeletion(messages);
+
+      if (!response) {
+      next(new Error("Something went wrong with the AI response"));
+    }
+
+    const assistantResponse: IChatMessage = {
+      id: undefined as any,
+      role: "assistant",
+      content: response.text,
+    };
+
+    const updatedMessages = [...messages, assistantResponse];
+
+    return { assistantResponse, updatedMessages };
+}
+
+router.post("/", optionalVerifyToken, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const {
       messages,
       chatLogId,
-    }: { messages: ChatMessages; chatLogId: string } = req.body;
+    }: { messages: IChatMessages; chatLogId: string } = req.body;
 
-    if (!messages) {
-      return res.status(400).json({ error: "Query is required" });
-    }
+    let finalChatLogId = chatLogId;
+    assert(messages && messages.length > 0, 400, "Messages are required");
 
     const response = await getChatCompeletion(messages);
+    assert(response, 500, "Failed to get response from AI");
 
-    const answer = response.steps[1]
-      ? (response.steps[1].content[0] as TextPart).text // toolia käytetty
-      : (response.steps[0].content[0] as TextPart).text; // toolia ei käytetty
-
-    const assistantResponse: AssistantMessage = {
+    const assistantResponse: IChatMessage = {
+      id: undefined as any,
       role: "assistant",
-      content: answer,
+      content: response.text,
     };
 
-    const updatedMessages: ChatMessages = [...messages, assistantResponse];
-
+ 
     if (req.user) {
-      const userId = req.user.id;
-      if (chatLogId) {
-        const newQueryAndResponse = [
-          messages[messages.length - 1],
-          assistantResponse,
-        ];
-
-        await ChatLog.findByIdAndUpdate(
-          chatLogId,
-          { $push: { messages: newQueryAndResponse } },
-          { new: true }
-        );
-        return res.json({ messages: updatedMessages, chatLogId });
-      } else {
-        const newChatLog = new ChatLog({
-          messages: updatedMessages,
-          userId: userId,
-        });
-        await newChatLog.save();
-        await User.findByIdAndUpdate(userId, {
-          $push: { chatLogs: newChatLog.id },
-        });
-        return res.json({
-          messages: updatedMessages,
-          chatLogId: newChatLog.id,
-        });
-      }
+      finalChatLogId = await saveChatLog(chatLogId, req.user.id, messages, assistantResponse);
     }
 
-    return res.json({ assistantResponse });
+    return res.json({ messages: assistantResponse, chatLogId: finalChatLogId });
   } catch (error) {
-    console.error("Error processing chat:", error);
-    return res.status(500).json({ error: "Internal server error" });
+    return next(error);
   }
 });
 
@@ -93,27 +82,45 @@ router.post(
       const {
         messages,
         chatLogId,
-      }: { messages: UIMessage[]; chatLogId?: string } = req.body;
+      }: { messages: UIMessage[]; chatLogId: string } = req.body;
+
+      console.log(chatLogId)
+
+      const lastUserMessage: IChatMessage = {
+        id: undefined as any,
+        role: "user",
+        content: messages[messages.length - 1].parts
+          .map((part) => (part.type === "text" ? part.text : ""))
+          .join(""),
+      };
+
+      const formattedMessages: IChatMessages = messages.map((msg) => ({
+        id: undefined as any,
+        role: msg.role,
+        content: msg.parts.map((part) => (part.type === "text" ? part.text : "")).join(""),
+      }));
+
+      console.log("Last user message:", lastUserMessage);
 
       pipeUIMessageStreamToResponse({
         response: res,
         stream: createUIMessageStream<MyUIMessage>({
           execute: async ({ writer }) => {
             let finalChatLogId = chatLogId;
-
             if (req.user) {
               const userId = req.user.id;
 
               if (finalChatLogId) {
+                console.log("Using existing chatLogId:", finalChatLogId);
                 // Käyttäjä + olemassa oleva logi → pusketaan uusi viesti
-                const lastUserMessage = messages[messages.length - 1];
                 await ChatLog.findByIdAndUpdate(finalChatLogId, {
                   $push: { messages: lastUserMessage },
                 });
               } else {
                 // Käyttäjä + ei logia → luodaan uusi
+                console.log("Creating new chat log for user");
                 const newChatLog = new ChatLog({
-                  messages, // sisältää käyttäjän kysymyksen
+                  messages: formattedMessages, // sisältää käyttäjän kysymyksen
                   userId,
                 });
                 await newChatLog.save();
@@ -123,6 +130,7 @@ router.post(
                 });
 
                 finalChatLogId = newChatLog.id;
+                console.log("Created new chatLogId:", finalChatLogId);
 
                 // Lähetetään id streamin mukana fronttiin
                 writer.write({
@@ -141,11 +149,13 @@ router.post(
               fullText += textPart;
             }
 
+            console.log("tallennetaan chatlogiin:", finalChatLogId);
+
             if (req.user && finalChatLogId) {
-              const assistantResponse: UIMessage = {
-                id: crypto.randomUUID(),
+              const assistantResponse: IMessage = {
+                id: undefined as any,
                 role: "assistant",
-                parts: [{ type: "text", text: fullText }],
+                content: fullText,
               };
 
               await ChatLog.findByIdAndUpdate(finalChatLogId, {

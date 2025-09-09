@@ -11,37 +11,29 @@ export const optionalVerifyToken = async (
 ) => {
   try {
     const token = req.header("Authorization")?.split(" ")[1];
-
     if (!token) {
       return next();
     }
-
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
       throw new Error("JWT_SECRET is not defined in the environment variables");
     }
-
     const decoded = jwt.verify(token, jwtSecret) as {
       id: string;
       email: string;
       password: string;
     };
-
     if (!decoded) {
-      throw new Error("Invalid token");
+      return next(new Error("Invalid token"));
     }
-
     const user = await User.findById(decoded.id);
-
     if (!user) {
-      throw new Error("User not found, token i");
+      throw new Error("User not found, token is invalid");
     }
-
     req.user = user;
-
     next();
   } catch (error) {
-    console.error("Error verifying token:", error);
+    next(error);
   }
 };
 
@@ -52,37 +44,29 @@ export const verifyToken = async (
 ) => {
   try {
     const token = req.header("Authorization")?.split(" ")[1];
-    console.log("taalla");
-
     if (!token) {
-      return next();
+      return next(new Error("No token provided"));
     }
-
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
       throw new Error("JWT_SECRET is not defined in the environment variables");
     }
-
     const decoded = jwt.verify(token, jwtSecret) as {
       id: string;
       email: string;
       password: string;
     };
-
     if (!decoded) {
       throw new Error("Invalid token");
     }
-
     const user = await User.findById(decoded.id);
-
     if (!user) {
-      throw new Error("User not found, token i");
+      throw new Error("User not found, token is invalid");
     }
-
     req.user = user;
-
     next();
   } catch (error) {
     console.error("Error verifying token:", error);
+    next(error);
   }
 };

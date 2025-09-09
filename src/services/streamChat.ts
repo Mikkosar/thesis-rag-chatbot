@@ -9,10 +9,30 @@ import {
 import { openai } from "@ai-sdk/openai";
 import { SearchHits } from "../types/vectorSearchTypes";
 
-import z from "zod";
+//import z from "zod";
 import { jsonSchema } from "ai";
-
 import { findInformation } from "./vectorSearch";
+
+const mySchema = jsonSchema<{
+  queries: string[];
+}>({
+  type: 'object',
+  properties: {
+    queries: {
+      type: 'array',
+      items: {
+        type: 'string',
+      },
+    },
+  },
+  required: ['queries'],
+});
+
+/*
+const myZodSchema = {
+  queries: z.array(z.string()).min(1).max(5),
+};
+*/
 
 export const getStreamText = async (messages: UIMessage[]) => {
   const result = streamText({
@@ -45,7 +65,7 @@ export const getStreamText = async (messages: UIMessage[]) => {
             object: { queries },
           } = await generateObject({
             model: openai("gpt-4o"),
-            schema: z.object({ queries: z.array(z.string()) }),
+            schema: mySchema,
             prompt: `Luo seuraavasta kysymyksestä 3:\n\n${query}`,
           });
 
