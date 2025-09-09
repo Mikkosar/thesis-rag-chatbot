@@ -9,6 +9,7 @@ export default function Chat() {
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     const message: Message = {
+      id: undefined,
       role: "user",
       content: input,
     };
@@ -31,11 +32,11 @@ export default function Chat() {
     <div className="container mx-auto max-w-3xl p-6">
       <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
         <div className="space-y-4">
-          {messages.map((m, idx) => (
+          {messages.map((message, idx) => (
             <div key={idx} className="whitespace-pre-wrap">
               <div>
-                <div className="font-bold">{m.role}</div>
-                <div>{m.content}</div>
+                <div className="font-bold">{message.role}</div>
+                <div>{message.content}</div>
               </div>
             </div>
           ))}
