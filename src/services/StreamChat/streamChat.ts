@@ -35,13 +35,13 @@ export const getStreamText = async (messages: UIMessage[]) => {
       system: chatBotSystemPrompt,
       tools: {
         // Työkalu, joka laajentaa kysymyksen useiksi muunnelmiksi ja hakee tietoa kaikilla niillä
+
         expandAndSearch: tool<{ query: string }, SearchHits[]>({
           name: "expandAndSearch",
           description:
             "Laajenna kysymys useiksi muunnelmiksi ja hae tietoa kaikilla niillä.",
           inputSchema: toolInputSchemaZod,
           execute: async ({ query }) => {
-            console.log("Työkalua käytetään");
             // Generoi useita kysymyksiä alkuperäisestä kysymyksestä
             const {
               object: { queries },
@@ -52,11 +52,8 @@ export const getStreamText = async (messages: UIMessage[]) => {
             });
 
             // Hae tietoa kaikilla generoituilla kysymyksillä
-            const results: SearchHits[] = [];
-            for (const q of queries) {
-              const r = await findInformation(q);
-              results.push(r);
-            }
+            const results = await findInformation(queries);
+            console.log("expandAndSearch results:", results);
             return results;
           },
         }),

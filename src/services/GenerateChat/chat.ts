@@ -39,12 +39,8 @@ export const getChatCompeletion = async (messages: IChatMessages) => {
             });
 
             // Hae tietoa kaikilla generoituilla kysymyksillä
-            const results: SearchHits[] = [];
-            for (const q of queries) {
-              const r = await findInformation(q);
-              console.log("Haku laajennetulla kysymyksellä:", q, r);
-              results.push(r);
-            }
+            const results = await findInformation(queries);
+            console.log("expandAndSearch results:", results);
             return results;
           },
         }),
