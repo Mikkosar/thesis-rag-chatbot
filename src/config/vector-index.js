@@ -1,5 +1,8 @@
 const { MongoClient } = require("mongodb");
 
+// Luo mongoDB vektori indeksi, jos ei ole vielä olemassa
+// Aja tämä tiedosto kerran ennen kuin yrität tehdä vektorihakua komennolla node src/config/vector-index.js
+
 const client = new MongoClient("Oma MongoDB URI tähän");
 
 async function run() {
@@ -23,11 +26,9 @@ async function run() {
       },
     };
 
-    // run the helper method
     const result = await collection.createSearchIndex(index);
     console.log(`New search index named ${result} is building.`);
 
-    // wait for the index to be ready to query
     console.log(
       "Polling to check if the index is ready. This may take up to a minute."
     );

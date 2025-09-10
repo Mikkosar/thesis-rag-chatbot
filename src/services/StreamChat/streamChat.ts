@@ -1,26 +1,37 @@
+import {
+  streamText,
+  tool,
+  stepCountIs,
+  generateObject,
+  UIMessage,
+  convertToModelMessages,
+} from "ai";
 import { openai } from "@ai-sdk/openai";
-import { generateText, tool, stepCountIs, generateObject } from "ai";
 import { SearchHits } from "../../types/vectorSearchTypes";
-import "dotenv/config";
+
+//import z from "zod";
 import { findInformation } from "../vectorSearch";
-import type { IChatMessages } from "@/types/chatLogTypes";
+import { chatBotSystemPrompt } from "@/types/aiPrompts";
 import { assert } from "@/utils/assert";
 import {
   toolInputSchemaZod,
   toolOptimazationSchemaZod,
 } from "@/types/aiGenTypes";
-import { chatBotSystemPrompt } from "@/types/aiPrompts";
 
 /*
 Ota nämä käyttöön jos Zod aiheuttaa ongelmia:
 import { toolInputSchemajson, toolOptimazationSchemajson } from "@/types/aiGenTypes";
 */
 
-export const getChatCompeletion = async (messages: IChatMessages) => {
+export const getStreamText = async (messages: UIMessage[]) => {
   try {
-    // Generoidaan vastaus käyttäen AI-mallia ja työkaluja
-    const result = await generateText({
+    // Generoidaan stream vastaus käyttäen AI-mallia ja työkaluja
+    const result = streamText({
       model: openai("gpt-4o"),
+      messages: convertToModelMessages(messages),
+      onFinish: () => {
+        console.log("Streaming finished.");
+      },
       system: chatBotSystemPrompt,
       tools: {
         // Työkalu, joka laajentaa kysymyksen useiksi muunnelmiksi ja hakee tietoa kaikilla niillä
@@ -42,7 +53,6 @@ export const getChatCompeletion = async (messages: IChatMessages) => {
             const results: SearchHits[] = [];
             for (const q of queries) {
               const r = await findInformation(q);
-              console.log("Haku laajennetulla kysymyksellä:", q, r);
               results.push(r);
             }
             return results;
@@ -51,7 +61,6 @@ export const getChatCompeletion = async (messages: IChatMessages) => {
       },
       // Rajoittaa maksimissaan 2 työkalun kutsuun
       stopWhen: stepCountIs(3),
-      messages: messages,
     });
     return result;
   } catch (error) {

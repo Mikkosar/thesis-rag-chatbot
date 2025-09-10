@@ -1,3 +1,4 @@
+// Chat-viestien tyypit
 export interface IMessage {
   id: string;
   role: "user" | "assistant" | "system";

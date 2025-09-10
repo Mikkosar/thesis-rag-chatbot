@@ -5,7 +5,6 @@ import { SearchHits } from "../types/vectorSearchTypes";
 export const findInformation = async (
   latestQuery: string
 ): Promise<SearchHits> => {
-  console.log("Finding information for query:", latestQuery);
   const embedding = await getEmbedding(latestQuery);
   try {
     const agg = [

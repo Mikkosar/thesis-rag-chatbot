@@ -1,47 +1,63 @@
 import { verifyToken } from "@/middleware/auth";
 import ChatLog from "../models/chatLog";
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
+import { assert } from "@/utils/assert";
+import CustomError from "@/types/customError";
 
 const router = express.Router();
 
-router.get("/", verifyToken, async (req: Request, res: Response) => {
-  try {
-    if (!req.user) {
-      return res.status(401).json({ error: "Unauthorized" });
+router.get(
+  "/",
+  verifyToken,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      if (!req.user) {
+        assert(req.user, 401, "Unauthorized");
+      }
+
+      // Haetaan käyttäjän chat-logit
+      const userId = req.user.id;
+      const chatLog = await ChatLog.find({ userId: userId });
+      assert(chatLog, 404, "No chat logs found for user");
+
+      return res.json(chatLog);
+    } catch (error) {
+      console.error("Error fetching chat logs:", error);
+      return next(error);
     }
-    const userId = req.user.id;
-    const chatLog = await ChatLog.findOne({ userId: userId });
-    return res.json(chatLog);
-  } catch (error) {
-    console.error("Error fetching chat logs:", error);
-    return res.status(500).json({ error: "Internal server error" });
   }
-});
+);
 
-router.delete("/:id", verifyToken, async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
+router.delete(
+  "/:id",
+  verifyToken,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      assert(id, 400, "Chat log ID is required");
 
-    const chatLogToDelete = await ChatLog.findById(id);
+      // Varmistetaan, että chat-logi kuuluu kirjautuneelle käyttäjälle
+      const chatLogToDelete = await ChatLog.findById(id);
+      assert(chatLogToDelete, 401, "Chat log not found");
 
-    if (!chatLogToDelete) {
-      return res.status(404).json({ error: "Chat log not found" });
+      if (req.user.id !== chatLogToDelete.userId.toString()) {
+        next(new CustomError(401, "Unauthorized"));
+      }
+
+      // Poistetaan chat-logi
+      const deletedChatLog = await ChatLog.findByIdAndDelete(id);
+
+      // Palautetaan onnistumisviesti
+      if (deletedChatLog) {
+        return res.json({ message: "Chat log deleted successfully" });
+      } else {
+        return assert(deletedChatLog, 404, "Chat log not found");
+      }
+    } catch (error) {
+      console.error("Error deleting chat log:", error);
+      next(new CustomError(500, "Internal Server Error"));
     }
-
-    if (req.user.id !== chatLogToDelete.userId.toString()) {
-      return res.status(403).json({ error: "Forbidden" });
-    }
-
-    const deletedChatLog = await ChatLog.findByIdAndDelete(id);
-    if (deletedChatLog) {
-      return res.json({ message: "Chat log deleted successfully" });
-    } else {
-      return res.status(404).json({ error: "Chat log not found" });
-    }
-  } catch (error) {
-    console.error("Error deleting chat log:", error);
-    return res.status(500).json({ error: "Internal server error" });
   }
-});
+);
 
 export default router;

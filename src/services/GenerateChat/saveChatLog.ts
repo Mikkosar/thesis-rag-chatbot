@@ -9,6 +9,7 @@ const saveChatLog = async (
   messages: IChatMessages,
   assistantResponse: IChatMessage
 ) => {
+  // Jos chatLogId on annettu, päivitä olemassa olevaa lokia
   if (chatLogId) {
     const newQueryAndResponse: IChatMessages = [
       messages[messages.length - 1],
@@ -21,22 +22,23 @@ const saveChatLog = async (
     );
     assert(updatedLog, 404, "Chat log not found");
     return chatLogId;
+  } else {
+    // Muuten luo uusi chat-loki
+    const newChatLog = new ChatLog({
+      messages: [...messages, assistantResponse],
+      userId,
+    });
+    const newLog = await newChatLog.save();
+    assert(newLog, 500, "Failed to create new chat log");
+
+    const updatedUserChatLogs = await User.findByIdAndUpdate(userId, {
+      $push: { chatLogs: newLog.id },
+    });
+
+    assert(updatedUserChatLogs, 404, "User not found");
+
+    return newLog.id;
   }
-
-  const newChatLog = new ChatLog({
-    messages: [...messages, assistantResponse],
-    userId,
-  });
-  const newLog = await newChatLog.save();
-  assert(newLog, 500, "Failed to create new chat log");
-
-  const updatedUserChatLogs = await User.findByIdAndUpdate(userId, {
-    $push: { chatLogs: newLog.id },
-  });
-  
-  assert(updatedUserChatLogs, 404, "User not found");
-
-  return newLog.id;
 };
 
 export default saveChatLog;

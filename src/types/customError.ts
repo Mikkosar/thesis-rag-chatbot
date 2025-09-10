@@ -1,3 +1,4 @@
+// Mukautettu virhe-luokka, joka sisältää HTTP-statuksen ja mahdolliset lisätiedot
 export default class CustomError extends Error {
   status: number;
   errors?: any;

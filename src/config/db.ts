@@ -4,6 +4,7 @@ dotenv.config();
 
 export const connectDB = async () => {
   try {
+    // Yhdistä MongoDB-tietokantaan
     await mongoose.connect(process.env.MONGO_URI || "");
     console.log("MongoDB connected");
   } catch (error) {

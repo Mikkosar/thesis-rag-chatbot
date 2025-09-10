@@ -1,17 +1,16 @@
-import OpenAI from "openai";
+import { assert } from "@/utils/assert";
+import { openai } from "@ai-sdk/openai";
+import { embed } from "ai";
 import dotenv from "dotenv";
 dotenv.config();
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 export const getEmbedding = async (text: string): Promise<number[]> => {
-  const response = await openai.embeddings.create({
-    model: "text-embedding-3-small",
-    input: text,
-    encoding_format: "float",
+  // Hae tekstin embedding OpenAI:n mallilla
+  const { embedding } = await embed({
+    model: openai.textEmbeddingModel("text-embedding-3-small"),
+    value: text,
   });
+  assert(embedding, 500, "Embedding generation failed");
 
-  return response.data[0].embedding;
+  return embedding;
 };
