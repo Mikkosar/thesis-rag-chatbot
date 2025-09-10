@@ -36,10 +36,12 @@ export const getStreamText = async (messages: UIMessage[]) => {
       tools: {
         // Työkalu, joka laajentaa kysymyksen useiksi muunnelmiksi ja hakee tietoa kaikilla niillä
         expandAndSearch: tool<{ query: string }, SearchHits[]>({
+          name: "expandAndSearch",
           description:
             "Laajenna kysymys useiksi muunnelmiksi ja hae tietoa kaikilla niillä.",
           inputSchema: toolInputSchemaZod,
           execute: async ({ query }) => {
+            console.log("Työkalua käytetään");
             // Generoi useita kysymyksiä alkuperäisestä kysymyksestä
             const {
               object: { queries },
