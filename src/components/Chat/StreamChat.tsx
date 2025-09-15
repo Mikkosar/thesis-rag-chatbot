@@ -1,6 +1,9 @@
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { useEffect, useRef, useState } from "react";
+import ChatBoXTopBar from "./chatComponents/chatBoxTopBar";
+import ChatBoxMessages from "./chatComponents/chatBoxMessages";
+import ChatBoxInputForm from "./chatComponents/chatBoxInputForm";
 
 const baseURL = import.meta.env.VITE_BASE_URL;
 
@@ -19,7 +22,7 @@ export default function StreamChat() {
     transport: new DefaultChatTransport({
       api: `${baseURL}/chat/stream`,
       headers: {
-        //authorization: `Bearer `,
+        //authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YjAwMjFhNzUwZDk4YWY1MGQ2MjU1MSIsImVtYWlsIjoiam9obmRvZUBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCQ4SUZ2bzkvTlpFSURVb0pCUE5sTVVPamRZRDF3RElKN1I3SDlMcW1uSkxrWEE1dTlTd3kudSIsImlhdCI6MTc1NzQzNDU5MCwiZXhwIjoxNzU3NDM4MTkwfQ.iTGRMuA_UnERXEGWh-0OI5kYaTzZHdF8gDnrkg23Nfs`,
       },
       body: () => ({
         chatLogId: chatLogIdRef.current, // aina tuore arvo
@@ -44,32 +47,15 @@ export default function StreamChat() {
   };
 
   return (
-    <div className="container mx-auto max-w-3xl p-6">
-      <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
-        <div className="space-y-4">
-          {messages.map((m, idx) => (
-            <div key={idx} className="whitespace-pre-wrap">
-              <div>
-                <div className="font-bold">{m.role}</div>
-                {m.parts.map((part, idx) => {
-                  switch (part.type) {
-                    case "text":
-                      return <p key={idx}>{part.text}</p>;
-                  }
-                })}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <form onSubmit={(e) => handleSendMessage(e)}>
-          <input
-            className="fixed bottom-0 w-full max-w-md p-2 mb-8 border border-black-300 rounded shadow-xl"
-            value={input}
-            placeholder="Kysele jotain..."
-            onChange={(e) => setInput(e.currentTarget.value)}
-          />
-        </form>
+    <div className="flex items-center justify-center p-4">
+      <div className="bg-white rounded-3xl shadow-2xl w-[600px] h-[900px] flex flex-col overflow-hidden">
+        <ChatBoXTopBar />
+        <ChatBoxMessages messages={messages} />
+        <ChatBoxInputForm
+          handleSendMessage={handleSendMessage}
+          input={input}
+          setInput={setInput}
+        />
       </div>
     </div>
   );

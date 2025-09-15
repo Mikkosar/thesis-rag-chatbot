@@ -49,57 +49,57 @@ export default function DataForm() {
       {formData ? (
         <form onSubmit={handleSubmit}>
           <div className="space-y-12">
-            <div className="border-b border-white/10 pb-12">
-              <h1 className="text-base font-semibold text-black">Muokkaus</h1>
-
-              <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                {/* Title */}
-                <div className="sm:col-span-4">
-                  <label
-                    htmlFor="title"
-                    className="block text-sm font-medium text-black"
-                  >
-                    Title:
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      name="title"
-                      type="text"
-                      value={formData.title || ""}
-                      onChange={handleChange}
-                      className="block w-full rounded-md border border-gray-300 bg-white py-1.5 px-3 text-base text-black placeholder:text-gray-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 sm:text-sm"
-                    />
+            <div className="space-y-8 bg-white/5 p-8 rounded-2xl shadow-2xl">
+              <div className="border-b border-white/10 pb-5 flex flex-col">
+                <h1 className="font-bold text-black justify-item justify-center flex underline text-xl">
+                  Muokkaus
+                </h1>
+                <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                  <div className="sm:col-span-4">
+                    <label
+                      htmlFor="title"
+                      className="block text-sm font-medium text-black"
+                    >
+                      Title:
+                    </label>
+                    <div className="mt-2">
+                      <input
+                        name="title"
+                        type="text"
+                        value={formData.title || ""}
+                        placeholder="Esim. Erityisopetus"
+                        onChange={handleChange}
+                        className="block w-full rounded-md border border-gray-500 bg-white py-1.5 px-3 text-base text-black placeholder:text-gray-500 focus:border-gray-500 focus:ring-2 focus:ring-gray-500 sm:text-sm"
+                      />
+                    </div>
                   </div>
-                </div>
-
-                {/* Content */}
-                <div className="sm:col-span-6">
-                  <label
-                    htmlFor="content"
-                    className="block text-sm font-medium text-black"
-                  >
-                    Content:
-                  </label>
-                  <div className="mt-2">
-                    <textarea
-                      name="content"
-                      value={formData.content || ""}
-                      onChange={handleChange}
-                      rows={4}
-                      className="block w-full rounded-md border border-gray-300 bg-white py-1.5 px-3 text-base text-black placeholder:text-gray-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 sm:text-sm"
-                    />
+                  <div className="sm:col-span-6">
+                    <label
+                      htmlFor="content"
+                      className="block text-sm font-medium text-black"
+                    >
+                      Content:
+                    </label>
+                    <div className="mt-2">
+                      <textarea
+                        name="content"
+                        value={formData.content || ""}
+                        onChange={handleChange}
+                        rows={10}
+                        className="block w-full rounded-md border border-gray-500 bg-white py-1.5 px-3 text-base text-black placeholder:text-gray-500 focus:border-gray-500 focus:ring-2 focus:ring-gray-500 sm:text-sm"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-
-            <div className="mt-6 flex items-center justify-end gap-x-6">
-              <button
-                type="submit"
-                className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-indigo-500"
-              >
-                Tallenna
-              </button>
+              <div className="mt-2 flex items-center justify-center">
+                <button
+                  type="submit"
+                  className="rounded-md bg-black-600 px-3 py-1.5 text-sm font-medium text-black shadow-sm hover:bg-green-200 transition"
+                >
+                  Tallenna
+                </button>
+              </div>
             </div>
           </div>
         </form>

@@ -3,8 +3,9 @@ import type { Chunk } from "../../types/chunk";
 import { useState } from "react";
 import { useAppDispatch } from "../../hook";
 import { createNewChunk } from "../../reducer/dataReducer";
+import DataFormInput from "./dataComponents/dataFormInput";
 
-export default function DataForm() {
+const DataForm = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [formData, setFormData] = useState<Partial<Chunk> | undefined>({});
@@ -29,62 +30,43 @@ export default function DataForm() {
         content: formData!.content!,
       })
     );
-    navigate(`/`); // Navigate to the main view after saving
+    navigate(`/`);
   };
 
   return (
     <div className="container mx-auto max-w-3xl p-6">
       {formData ? (
         <form onSubmit={handleSubmit}>
-          <div className="space-y-12">
-            <div className="border-b border-white/10 pb-12">
-              <h1 className="text-base font-semibold text-black">Luo</h1>
-
+          <div className="space-y-8 bg-white/5 p-8 rounded-2xl shadow-2xl">
+            <div className="border-b border-white/10 pb-5 flex flex-col">
+              <h1 className="font-bold text-black justify-item justify-center flex text-xl">
+                Luo uusi Chunk tietokantaan
+              </h1>
               <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                {/* Title */}
-                <div className="sm:col-span-4">
-                  <label
-                    htmlFor="title"
-                    className="block text-sm font-medium text-black"
-                  >
-                    Title:
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      name="title"
-                      type="text"
-                      value={formData.title || ""}
-                      onChange={handleChange}
-                      className="block w-full rounded-md border border-gray-300 bg-white py-1.5 px-3 text-base text-black placeholder:text-gray-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 sm:text-sm"
-                    />
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="sm:col-span-6">
-                  <label
-                    htmlFor="content"
-                    className="block text-sm font-medium text-black"
-                  >
-                    Content:
-                  </label>
-                  <div className="mt-2">
-                    <textarea
-                      name="content"
-                      value={formData.content || ""}
-                      onChange={handleChange}
-                      rows={4}
-                      className="block w-full rounded-md border border-gray-300 bg-white py-1.5 px-3 text-base text-black placeholder:text-gray-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 sm:text-sm"
-                    />
-                  </div>
-                </div>
+                <DataFormInput
+                  formData={formData}
+                  handleChange={handleChange}
+                  label="Title:"
+                  placeholder="Esim. Erityisopetus"
+                  name="title"
+                  text="Title on chunkin kategorisointia varten. Titlen tulisi olla kuvaava ja selkeä."
+                  rows={1}
+                />
+                <DataFormInput
+                  formData={formData}
+                  handleChange={handleChange}
+                  label="Content:"
+                  placeholder="Esim. Jos sinulla on pysyvä opiskeluun vaikuttava terveyshaaste, hanki lääkärin lausunto. Tapaaminen: Sovi tapaaminen erityisopettajan kanssa. Keskustele opiskeluun vaikuttavista tekijöistä. Suositus: Erityisopettaja kirjoittaa suosituksen yksilöllisistä järjestelyistä."
+                  name="content"
+                  text="Hyvä chunkki on itsenäinen, selkeästi rajattu tekstipätkä (yleensä 2-6 virkettä), joka sisältää yhden pääajatuksen."
+                  rows={6}
+                />
               </div>
             </div>
-
-            <div className="mt-6 flex items-center justify-end gap-x-6">
+            <div className="mt-2 flex items-center justify-center">
               <button
                 type="submit"
-                className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-indigo-500"
+                className="rounded-md bg-black-600 px-3 py-1.5 text-sm font-medium text-black shadow-sm hover:bg-green-200 transition"
               >
                 Tallenna
               </button>
@@ -96,4 +78,6 @@ export default function DataForm() {
       )}
     </div>
   );
-}
+};
+
+export default DataForm;
