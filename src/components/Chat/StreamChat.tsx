@@ -22,7 +22,7 @@ export default function StreamChat() {
     transport: new DefaultChatTransport({
       api: `${baseURL}/chat/stream`,
       headers: {
-        //authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YjAwMjFhNzUwZDk4YWY1MGQ2MjU1MSIsImVtYWlsIjoiam9obmRvZUBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCQ4SUZ2bzkvTlpFSURVb0pCUE5sTVVPamRZRDF3RElKN1I3SDlMcW1uSkxrWEE1dTlTd3kudSIsImlhdCI6MTc1NzQzNDU5MCwiZXhwIjoxNzU3NDM4MTkwfQ.iTGRMuA_UnERXEGWh-0OI5kYaTzZHdF8gDnrkg23Nfs`,
+        //authorization: `Bearer ...`,
       },
       body: () => ({
         chatLogId: chatLogIdRef.current, // aina tuore arvo
@@ -30,7 +30,6 @@ export default function StreamChat() {
     }),
     onData: (dataPart) => {
       console.log("Received data part:", dataPart.data);
-      // Type assertion to tell TypeScript what properties exist
       const data = dataPart.data as { chatLogId?: string };
       console.log("Data part chatLogId:", data?.chatLogId);
       if (data && data.chatLogId) {

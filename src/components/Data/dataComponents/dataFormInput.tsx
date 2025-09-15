@@ -10,16 +10,17 @@ type DataFormInputProps = {
   text?: string;
   label: string;
   rows?: number;
+  value?: string;
 };
 
 const DataFormInput = ({
-  formData,
   handleChange,
   placeholder,
   name,
   text,
   label,
   rows,
+  value
 }: DataFormInputProps) => {
   return (
     <div className="sm:col-span-6">
@@ -30,7 +31,7 @@ const DataFormInput = ({
       <div className="mt-2">
         <textarea
           name={name}
-          value={formData.content || ""}
+          value={value || ""}
           onChange={handleChange}
           placeholder={placeholder}
           rows={rows}

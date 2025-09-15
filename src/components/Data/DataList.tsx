@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../hook";
+import Button from "../button";
 
 export default function DataList() {
   const chunks = useAppSelector((state) => state.chunks ?? []);
@@ -21,12 +22,7 @@ export default function DataList() {
         Chunkit tietokannassa
       </h1>
       <div className="flex justify-center mb-4">
-        <button
-          onClick={() => handleCreate()}
-          className="rounded-md bg-black-600 px-3 py-1.5 text-sm font-medium text-black shadow-sm hover:bg-green-200 transition"
-        >
-          Luo uusi chunk +
-        </button>
+        <Button text="Luo uusi chunk +" onClick={() => handleCreate()} type="button" color="green" />
       </div>
 
       {chunks && uniqueTitles ? (
@@ -43,12 +39,7 @@ export default function DataList() {
                 <p className="text-sm font-semibold text-black">{title}</p>
               </div>
               <div className="shrink-0">
-                <button
-                  onClick={() => handleShowMore(title)}
-                  className="rounded-md bg-black-600 px-3 py-1.5 text-sm font-medium text-black shadow-sm hover:bg-gray-300 transition"
-                >
-                  Lisää
-                </button>
+                <Button text="Näytä Lisää" onClick={() => handleShowMore(title)} type="submit" color="gray" />
               </div>
             </li>
           ))}

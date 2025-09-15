@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useAppDispatch } from "../../hook";
 import { createNewChunk } from "../../reducer/dataReducer";
 import DataFormInput from "./dataComponents/dataFormInput";
+import Button from "../button";
+import Header from "./dataComponents/dataHeaders";
 
 const DataForm = () => {
   const navigate = useNavigate();
@@ -39,9 +41,7 @@ const DataForm = () => {
         <form onSubmit={handleSubmit}>
           <div className="space-y-8 bg-white/5 p-8 rounded-2xl shadow-2xl">
             <div className="border-b border-white/10 pb-5 flex flex-col">
-              <h1 className="font-bold text-black justify-item justify-center flex text-xl">
-                Luo uusi Chunk tietokantaan
-              </h1>
+              <Header title="Luo uusi Chunk tietokantaan" />
               <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                 <DataFormInput
                   formData={formData}
@@ -51,6 +51,7 @@ const DataForm = () => {
                   name="title"
                   text="Title on chunkin kategorisointia varten. Titlen tulisi olla kuvaava ja selkeä."
                   rows={1}
+                  value={formData.title}
                 />
                 <DataFormInput
                   formData={formData}
@@ -60,16 +61,13 @@ const DataForm = () => {
                   name="content"
                   text="Hyvä chunkki on itsenäinen, selkeästi rajattu tekstipätkä (yleensä 2-6 virkettä), joka sisältää yhden pääajatuksen."
                   rows={6}
+                  value={formData.content}
                 />
               </div>
             </div>
             <div className="mt-2 flex items-center justify-center">
-              <button
-                type="submit"
-                className="rounded-md bg-black-600 px-3 py-1.5 text-sm font-medium text-black shadow-sm hover:bg-green-200 transition"
-              >
-                Tallenna
-              </button>
+              <Button type="submit" text="Tallenna" color="green" />
+              <Button text="Peruuta" color="gray" onClick={() => navigate(-1)} type="button" />
             </div>
           </div>
         </form>

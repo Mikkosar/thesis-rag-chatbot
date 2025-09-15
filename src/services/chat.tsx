@@ -11,7 +11,7 @@ const sendMessage = async (messages: MessageList) => {
       { messages, chatLogId: "68bd9d819d72f8682c6c4c6c" },
       {
         headers: {
-          //Authorization: `Bearer `
+          //Authorization: `Bearer ...`
         },
       }
     );
