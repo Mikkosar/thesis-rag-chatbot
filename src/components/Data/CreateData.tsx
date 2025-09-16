@@ -11,6 +11,7 @@ const DataForm = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [formData, setFormData] = useState<Partial<Chunk> | undefined>({});
+  const [aiToolActive, setAiToolActive] = useState<boolean>(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -43,6 +44,9 @@ const DataForm = () => {
             <div className="border-b border-white/10 pb-5 flex flex-col">
               <Header title="Luo uusi Chunk tietokantaan" />
               <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                <div className="flex justify-items-center mb-2">
+                  <Button text="AI työkalu" color="gray" onClick={() => setAiToolActive(!aiToolActive)} type="button" />
+                </div>
                 <DataFormInput
                   formData={formData}
                   handleChange={handleChange}
@@ -67,13 +71,15 @@ const DataForm = () => {
             </div>
             <div className="mt-2 flex items-center justify-center">
               <Button type="submit" text="Tallenna" color="green" />
-              <Button text="Peruuta" color="gray" onClick={() => navigate(-1)} type="button" />
             </div>
           </div>
         </form>
       ) : (
         <p className="text-black text-center py-10">Loading chunk...</p>
       )}
+      <div className="mt-10 flex items-center justify-center">
+        <Button text="Peruuta" color="gray" onClick={() => navigate(-1)} type="button" />
+      </div>
     </div>
   );
 };
