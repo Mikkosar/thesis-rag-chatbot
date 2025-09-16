@@ -2,6 +2,7 @@ import { getEmbedding } from "../services/embedding";
 import Chunk from "../models/chunk";
 import express, { NextFunction, Request, Response } from "express";
 import { assert } from "@/utils/assert";
+import { createChunks } from "@/services/chunkCreation";
 
 const router = express.Router();
 
@@ -50,6 +51,20 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     return res.status(201).json(savedChunk);
   } catch (error) {
     console.error("Error creating chunk:", error);
+    return next(error);
+  }
+});
+
+router.post("/test", async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const x: string = req.body.content;
+    assert(x, 400, "Input text is required");
+
+    const chunks = await createChunks(x);
+    assert(chunks, 500, "Failed to create chunks");
+    return res.status(201).json(chunks);
+  } catch (error) {
+    console.error("Error creating chunks:", error);
     return next(error);
   }
 });
