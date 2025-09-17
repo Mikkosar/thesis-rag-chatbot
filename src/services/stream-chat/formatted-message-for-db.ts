@@ -1,4 +1,4 @@
-import { IChatMessage } from "@/types/chatLogTypes";
+import { IChatMessage } from "@/types/chat-log-types";
 import { UIMessage } from "ai";
 
 const formattedMessagesForDB = (

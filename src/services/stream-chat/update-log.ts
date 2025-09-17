@@ -1,5 +1,5 @@
-import ChatLog from "@/models/chatLog";
-import { IMessage } from "@/types/chatLogTypes";
+import ChatLog from "@/models/chat-log";
+import { IMessage } from "@/types/chat-log-types";
 import { assert } from "@/utils/assert";
 
 const updateLogWithAssistantMessage = async (

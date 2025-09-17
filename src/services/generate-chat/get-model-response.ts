@@ -1,4 +1,4 @@
-import { IChatMessage, IChatMessages } from "@/types/chatLogTypes";
+import { IChatMessage, IChatMessages } from "@/types/chat-log-types";
 import { assert } from "@/utils/assert";
 import { getChatCompeletion } from "./chat";
 

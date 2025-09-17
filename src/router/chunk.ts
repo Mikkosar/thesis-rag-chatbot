@@ -2,7 +2,7 @@ import { getEmbedding } from "../services/embedding";
 import Chunk from "../models/chunk";
 import express, { NextFunction, Request, Response } from "express";
 import { assert } from "@/utils/assert";
-import { createChunks } from "@/services/chunkCreation";
+import { createChunks } from "@/services/chunk-creation";
 
 const router = express.Router();
 
@@ -55,9 +55,9 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-router.post("/test", async (req: Request, res: Response, next: NextFunction) => {
+router.post("/multiple", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const x: string = req.body.content;
+    const x: string = req.body.text;
     assert(x, 400, "Input text is required");
 
     const chunks = await createChunks(x);

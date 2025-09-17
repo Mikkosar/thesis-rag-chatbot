@@ -7,16 +7,16 @@ import {
   convertToModelMessages,
 } from "ai";
 import { openai } from "@ai-sdk/openai";
-import { SearchHits } from "../../types/vectorSearchTypes";
+import { SearchHits } from "../../types/vector-search-types";
 
 //import z from "zod";
-import { findInformation } from "../vectorSearch";
-import { chatBotSystemPrompt } from "@/types/aiPrompts";
+import { findInformation } from "../vector-search";
+import { chatBotSystemPrompt } from "@/types/ai-prompts";
 import { assert } from "@/utils/assert";
 import {
   toolInputSchemaZod,
   toolOptimazationSchemaZod,
-} from "@/types/aiGenTypes";
+} from "@/types/ai-gen-types";
 
 /*
 Ota nämä käyttöön jos Zod aiheuttaa ongelmia:

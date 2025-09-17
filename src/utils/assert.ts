@@ -1,4 +1,4 @@
-import CustomError from "@/types/customError";
+import CustomError from "@/types/custom-error";
 
 // Assert-funktio, joka heittää CustomErrorin, jos ehto ei täyty
 export function assert(

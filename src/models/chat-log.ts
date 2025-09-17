@@ -1,4 +1,4 @@
-import { IMessage } from "@/types/chatLogTypes";
+import { IMessage } from "@/types/chat-log-types";
 import mongoose, { Model } from "mongoose";
 const { Schema } = mongoose;
 

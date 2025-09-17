@@ -1,5 +1,5 @@
-import ChatLog from "@/models/chatLog";
-import { IChatMessage } from "@/types/chatLogTypes";
+import ChatLog from "@/models/chat-log";
+import { IChatMessage } from "@/types/chat-log-types";
 import { assert } from "../assert";
 
 const updateChatLog = async (
