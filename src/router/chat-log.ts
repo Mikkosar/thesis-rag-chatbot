@@ -1,8 +1,8 @@
 import { verifyToken } from "@/middleware/auth";
-import ChatLog from "../models/chatLog";
+import ChatLog from "../models/chat-log";
 import express, { NextFunction, Request, Response } from "express";
 import { assert } from "@/utils/assert";
-import CustomError from "@/types/customError";
+import CustomError from "@/types/custom-error";
 
 const router = express.Router();
 

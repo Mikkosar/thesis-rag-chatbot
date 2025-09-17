@@ -1,7 +1,7 @@
 import chunk from "./chunk";
 import chat from "./chat";
 import user from "./user";
-import chatLog from "./chatLog";
+import chatLog from "./chat-log";
 
 import { Router } from "express";
 

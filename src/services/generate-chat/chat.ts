@@ -1,43 +1,30 @@
-import {
-  streamText,
-  tool,
-  stepCountIs,
-  generateObject,
-  UIMessage,
-  convertToModelMessages,
-} from "ai";
 import { openai } from "@ai-sdk/openai";
-import { SearchHits } from "../../types/vectorSearchTypes";
-
-//import z from "zod";
-import { findInformation } from "../vectorSearch";
-import { chatBotSystemPrompt } from "@/types/aiPrompts";
+import { generateText, tool, stepCountIs, generateObject } from "ai";
+import { SearchHits } from "../../types/vector-search-types";
+import "dotenv/config";
+import { findInformation } from "../vector-search";
+import type { IChatMessages } from "@/types/chat-log-types";
 import { assert } from "@/utils/assert";
 import {
   toolInputSchemaZod,
   toolOptimazationSchemaZod,
-} from "@/types/aiGenTypes";
+} from "@/types/ai-gen-types";
+import { chatBotSystemPrompt } from "@/types/ai-prompts";
 
 /*
 Ota nämä käyttöön jos Zod aiheuttaa ongelmia:
 import { toolInputSchemajson, toolOptimazationSchemajson } from "@/types/aiGenTypes";
 */
 
-export const getStreamText = async (messages: UIMessage[]) => {
+export const getChatCompeletion = async (messages: IChatMessages) => {
   try {
-    // Generoidaan stream vastaus käyttäen AI-mallia ja työkaluja
-    const result = streamText({
+    // Generoidaan vastaus käyttäen AI-mallia ja työkaluja
+    const result = await generateText({
       model: openai("gpt-4o"),
-      messages: convertToModelMessages(messages),
-      onFinish: () => {
-        console.log("Streaming finished.");
-      },
       system: chatBotSystemPrompt,
       tools: {
         // Työkalu, joka laajentaa kysymyksen useiksi muunnelmiksi ja hakee tietoa kaikilla niillä
-
         expandAndSearch: tool<{ query: string }, SearchHits[]>({
-          name: "expandAndSearch",
           description:
             "Laajenna kysymys useiksi muunnelmiksi ja hae tietoa kaikilla niillä.",
           inputSchema: toolInputSchemaZod,
@@ -60,6 +47,7 @@ export const getStreamText = async (messages: UIMessage[]) => {
       },
       // Rajoittaa maksimissaan 2 työkalun kutsuun
       stopWhen: stepCountIs(3),
+      messages: messages,
     });
     return result;
   } catch (error) {

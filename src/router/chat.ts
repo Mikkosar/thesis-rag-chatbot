@@ -6,16 +6,16 @@ import {
   UIMessage,
 } from "ai";
 import { optionalVerifyToken } from "@/middleware/auth";
-import { getStreamText } from "@/services/StreamChat/streamChat";
+import { getStreamText } from "@/services/stream-chat/stream-chat";
 
-import type { IChatMessages } from "@/types/chatLogTypes";
+import type { IChatMessages } from "@/types/chat-log-types";
 import { assert } from "@/utils/assert";
-import saveChatLog from "@/services/GenerateChat/saveChatLog";
-import getModelResponse from "@/services/GenerateChat/getModelResponse";
-import formattedMessagesForDB from "@/services/StreamChat/formattedMessageForDB";
-import createOrUpdateChatLog from "@/services/StreamChat/updateOrCreateLog";
-import updateLogWithAssistantMessage from "@/services/StreamChat/updateLog";
-import { MessageStream } from "@/types/messageStream";
+import saveChatLog from "@/services/generate-chat/save-chat-log";
+import getModelResponse from "@/services/generate-chat/get-model-response";
+import formattedMessagesForDB from "@/services/stream-chat/formatted-message-for-db";
+import createOrUpdateChatLog from "@/services/stream-chat/update-or-create-log";
+import updateLogWithAssistantMessage from "@/services/stream-chat/update-log";
+import { MessageStream } from "@/types/message-stream";
 
 const router = express.Router();
 

@@ -1,6 +1,6 @@
-import { IChatMessage } from "@/types/chatLogTypes";
-import createChatLog from "@/utils/helpers/createChatLog";
-import updateChatLog from "@/utils/helpers/updateChatLog";
+import { IChatMessage } from "@/types/chat-log-types";
+import createChatLog from "@/utils/helpers/create-chat-log";
+import updateChatLog from "@/utils/helpers/update-chat-log";
 
 export const createOrUpdateChatLog = async (
   userId: string,

@@ -1,6 +1,6 @@
-import ChatLog from "@/models/chatLog";
+import ChatLog from "@/models/chat-log";
 import User from "@/models/user";
-import { IChatMessage, IChatMessages } from "@/types/chatLogTypes";
+import { IChatMessage, IChatMessages } from "@/types/chat-log-types";
 import { assert } from "@/utils/assert";
 
 const saveChatLog = async (

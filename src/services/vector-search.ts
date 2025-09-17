@@ -1,6 +1,6 @@
 import { getMultipleEmbeddings } from "./embedding";
 import Chunk from "../models/chunk";
-import { SearchHits } from "../types/vectorSearchTypes";
+import { SearchHits } from "../types/vector-search-types";
 
 export const findInformation = async (
   queries: string[]
