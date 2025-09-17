@@ -1,8 +1,8 @@
 import { useMatch, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hook";
 import type { Chunk, ChunkList } from "../../types/chunk";
-import { deleteChunk } from "../../reducer/dataReducer";
-import DataDetails from "./dataComponents/dataDetails";
+import { deleteChunk } from "../../reducer/data-reducer";
+import DataDetails from "./data-components/dataDetails";
 import Button from "../button";
 
 export default function DataForm() {

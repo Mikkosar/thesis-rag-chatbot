@@ -42,4 +42,15 @@ const createChunk = async (newData: EChunk) => {
     throw error;
   }
 };
-export default { getAllChunks, editChunk, deleteChunk, createChunk };
+
+const createMultipleChunks = async (text: string) => {
+  try {
+    const res = await axios.post(`${baseURL}/chunk/multiple`, { text });
+    return res.data;
+  } catch (error) {
+    console.error("Error creating multiple chunks:", error);
+    throw error;
+  }
+};
+
+export default { getAllChunks, editChunk, deleteChunk, createChunk, createMultipleChunks };

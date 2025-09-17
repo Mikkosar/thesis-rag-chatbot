@@ -2,9 +2,10 @@ import type { UIDataTypes, UIMessage, UITools } from "ai";
 
 type Props = {
   messages: UIMessage<unknown, UIDataTypes, UITools>[];
+  status: string;
 };
 
-const ChatBoxMessages = ({ messages }: Props) => {
+const ChatBoxMessages = ({ messages, status }: Props) => {
   return (
     <div className="flex-1 p-4 overflow-y-auto flex flex-col">
       {messages.length > 0 ? (
@@ -24,12 +25,27 @@ const ChatBoxMessages = ({ messages }: Props) => {
                 }`}
               >
                 <div className="whitespace-pre-wrap break-words">
-                  {message.parts.map((part, idx) => {
-                    switch (part.type) {
-                      case "text":
-                        return <p key={idx}>{part.text}</p>;
-                    }
-                  })}
+                  {message.role === "assistant" && 
+                   idx === messages.length - 1 && 
+                   (!message.parts || message.parts.length === 0 || 
+                    !message.parts.some(part => part.type === "text" && part.text && part.text.trim())) ? (
+                    // Näytä lataussymboli tyhjässä assistant-viestissä
+                    <div className="flex items-center space-x-2">
+                      <div className="flex space-x-1">
+                        <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                        <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                      </div>
+                    </div>
+                  ) : (
+                    // Näytä normaali viesti tai streaming-teksti
+                    message.parts.map((part, idx) => {
+                      switch (part.type) {
+                        case "text":
+                          return <p key={idx}>{part.text}</p>;
+                      }
+                    })
+                  )}
                 </div>
               </div>
             </div>

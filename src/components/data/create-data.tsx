@@ -2,16 +2,15 @@ import { useNavigate } from "react-router-dom";
 import type { Chunk } from "../../types/chunk";
 import { useState } from "react";
 import { useAppDispatch } from "../../hook";
-import { createNewChunk } from "../../reducer/dataReducer";
-import DataFormInput from "./dataComponents/dataFormInput";
+import { createNewChunk } from "../../reducer/data-reducer";
+import DataFormInput from "./data-components/dataFormInput";
 import Button from "../button";
-import Header from "./dataComponents/dataHeaders";
+import Header from "./data-components/dataHeaders";
 
 const DataForm = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [formData, setFormData] = useState<Partial<Chunk> | undefined>({});
-  const [aiToolActive, setAiToolActive] = useState<boolean>(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -45,7 +44,7 @@ const DataForm = () => {
               <Header title="Luo uusi Chunk tietokantaan" />
               <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                 <div className="flex justify-items-center mb-2">
-                  <Button text="AI työkalu" color="gray" onClick={() => setAiToolActive(!aiToolActive)} type="button" />
+                  <Button text="AI työkalu" color="gray" onClick={() => navigate("/create-multiple")} type="button" />
                 </div>
                 <DataFormInput
                   formData={formData}

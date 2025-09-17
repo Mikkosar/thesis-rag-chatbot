@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import chunkReducer from "./reducer/dataReducer";
+import chunkReducer from "./reducer/data-reducer";
 
 const store = configureStore({
   reducer: {

@@ -1,10 +1,9 @@
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { useEffect, useRef, useState } from "react";
-import ChatBoXTopBar from "./chatComponents/chatBoxTopBar";
-import ChatBoxMessages from "./chatComponents/chatBoxMessages";
-import ChatBoxInputForm from "./chatComponents/chatBoxInputForm";
-
+import ChatBoXTopBar from "./chat-components/chat-box-top-bar";
+import ChatBoxMessages from "./chat-components/chat-box-messages";
+import ChatBoxInputForm from "./chat-components/chat-box-input-form";
 const baseURL = import.meta.env.VITE_BASE_URL;
 
 export default function StreamChat() {
@@ -18,7 +17,7 @@ export default function StreamChat() {
     chatLogIdRef.current = chatLogId;
   }, [chatLogId]);
 
-  const { messages, sendMessage } = useChat({
+  const { messages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({
       api: `${baseURL}/chat/stream`,
       headers: {
@@ -49,11 +48,12 @@ export default function StreamChat() {
     <div className="flex items-center justify-center p-4">
       <div className="bg-white rounded-3xl shadow-2xl w-[600px] h-[900px] flex flex-col overflow-hidden">
         <ChatBoXTopBar />
-        <ChatBoxMessages messages={messages} />
+        <ChatBoxMessages messages={messages} status={status} />
         <ChatBoxInputForm
           handleSendMessage={handleSendMessage}
           input={input}
           setInput={setInput}
+          status={status}
         />
       </div>
     </div>

@@ -2,12 +2,14 @@ type ChatBoxInputFormProps = {
   handleSendMessage: (e: React.FormEvent) => void;
   input: string;
   setInput: React.Dispatch<React.SetStateAction<string>>;
+  status: string;
 };
 
 const ChatBoxInputForm = ({
   handleSendMessage,
   input,
   setInput,
+  status,
 }: ChatBoxInputFormProps) => {
   return (
     <div className="p-4 bg-gray-50 border-t">
@@ -17,11 +19,12 @@ const ChatBoxInputForm = ({
           value={input}
           placeholder="Kysele jotain..."
           onChange={(e) => setInput(e.currentTarget.value)}
+          disabled={status !== "ready"}
         />
         <button
           type="submit"
           className="px-6 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-          disabled={!input.trim()}
+          disabled={!input.trim() || status !== "ready"}
         >
           <svg
             className="w-5 h-5"

@@ -1,14 +1,15 @@
 // src/App.tsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Nav";
-import DataList from "./components/data/DataList";
-import DataDetails from "./components/data/DataDetails";
-import EditDataForm from "./components/data/EditDataForm";
-import CreateData from "./components/data/CreateData";
+import Navbar from "./components/nav";
+import DataList from "./components/data/data-list";
+import DataDetails from "./components/data/data-details";
+import EditDataForm from "./components/data/edit-data-form";
+import CreateData from "./components/data/create-data";
 import { useEffect } from "react";
-import { initializeChunks } from "./reducer/dataReducer";
+import { initializeChunks } from "./reducer/data-reducer";
 import { useAppDispatch } from "./hook";
-import StreamChat from "./components/Chat/StreamChat";
+import StreamChat from "./components/chat/stream-chat";
+import CreateMultipleChunks from "./components/data/create-multiple-chunks";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -27,6 +28,7 @@ function App() {
           <Route path="/edit/:id" element={<EditDataForm />} />
           <Route path="/create" element={<CreateData />} />
           <Route path="/chat" element={<StreamChat />} />
+          <Route path="/create-multiple" element={<CreateMultipleChunks />} />
         </Routes>
       </div>
     </Router>

@@ -2,11 +2,11 @@ import { useState } from "react";
 import type { Chunk, ChunkList } from "../../types/chunk";
 import { useAppDispatch, useAppSelector } from "../../hook";
 import { useMatch } from "react-router-dom";
-import { editChunk } from "../../reducer/dataReducer";
+import { editChunk } from "../../reducer/data-reducer";
 import { useNavigate } from "react-router-dom";
 import Button from "../button";
-import Header from "./dataComponents/dataHeaders";
-import EditData from "./dataComponents/editData";
+import Header from "./data-components/dataHeaders";
+import EditData from "./data-components/editData";
 
 export default function DataForm() {
   const dispatch = useAppDispatch();
