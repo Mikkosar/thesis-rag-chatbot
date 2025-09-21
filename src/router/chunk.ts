@@ -48,7 +48,10 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     const savedChunk = await newChunk.save();
     assert(savedChunk, 500, "Failed to save chunk");
 
-    return res.status(201).json(savedChunk);
+    return res.status(201).json({
+      title: savedChunk.title,
+      content: savedChunk.content,
+    });
   } catch (error) {
     console.error("Error creating chunk:", error);
     return next(error);

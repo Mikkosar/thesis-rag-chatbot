@@ -58,7 +58,7 @@ router.post(
 
       // Tarkista, onko käyttäjä jo olemassa
       const doesUserExist = await User.findOne({ email });
-      assert(doesUserExist, 409, "User with this email already exists");
+      assert(!doesUserExist, 409, "User with this email already exists");
 
       // Luo uusi käyttäjä ja tallenna tietokantaan
       const passwordHash = await bcrypt.hash(password, 10);
@@ -71,36 +71,16 @@ router.post(
       const savedUser = await newUser.save();
       assert(savedUser, 500, "Failed to save user");
 
-      return res.status(201).json(savedUser);
+      return res.status(201).json({
+        firstName: savedUser.firstName,
+        lastName: savedUser.lastName,
+        email: savedUser.email,
+      });
     } catch (error) {
       console.error("Error processing user route:", error);
       return next(error);
     }
   }
 );
-
-router.get("/", async (_req: Request, res: Response, next: NextFunction) => {
-  try {
-    // Hae kaikki käyttäjät ja populoi chatLogs
-    const users = await User.find({}).populate("chatLogs");
-    assert(users, 404, "No users found");
-    return res.json(users);
-  } catch (error) {
-    console.error("Error fetching users:", error);
-    return next(error);
-  }
-});
-
-router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    // Hae käyttäjä ID:llä ja populoi chatLogs
-    const user = await User.findById(req.params.id).populate("chatLogs");
-    assert(user, 404, "User not found");
-    return res.json(user);
-  } catch (error) {
-    console.error("Error fetching user:", error);
-    return next(error);
-  }
-});
 
 export default router;

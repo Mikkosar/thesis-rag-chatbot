@@ -1,9 +1,11 @@
-const { MongoClient } = require("mongodb");
+import { MongoClient } from "mongodb";
+import dotenv from "dotenv";
+dotenv.config();
 
 // Luo mongoDB vektori indeksi, jos ei ole vielä olemassa
 // Aja tämä tiedosto kerran ennen kuin yrität tehdä vektorihakua komennolla node src/config/vector-index.js
 
-const client = new MongoClient("Oma MongoDB URI tähän");
+const client = new MongoClient(process.env.MONGO_URI);
 
 async function run() {
   try {
