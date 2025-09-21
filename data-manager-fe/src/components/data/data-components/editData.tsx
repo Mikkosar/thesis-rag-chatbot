@@ -1,12 +1,16 @@
+// src/components/data/data-components/editData.tsx
+// Muokkaus-kentät chunkin tietojen muokkaamiseen
+
 type EditDataProps = {
-    title: string;
-    content: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    title: string; // Chunkin otsikko
+    content: string; // Chunkin sisältö
+    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void; // Muutoksen käsittelijä
 }
 
 const EditData = ({ title, content, onChange }: EditDataProps) => {
     return (
         <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                  {/* Otsikko-kenttä */}
                   <div className="sm:col-span-4">
                     <label
                       htmlFor="title"
@@ -25,6 +29,8 @@ const EditData = ({ title, content, onChange }: EditDataProps) => {
                       />
                     </div>
                   </div>
+                  
+                  {/* Sisältö-kenttä */}
                   <div className="sm:col-span-6">
                     <label
                       htmlFor="content"

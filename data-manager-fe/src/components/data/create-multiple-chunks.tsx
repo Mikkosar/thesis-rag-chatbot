@@ -1,3 +1,6 @@
+// src/components/data/create-multiple-chunks.tsx
+// AI-työkalu usean chunkin luomiseen yhdestä tekstistä
+
 import { useEffect, useState } from "react";
 import type { Chunk } from "../../types/chunk";
 import Header from "./data-components/dataHeaders";
@@ -8,23 +11,29 @@ import chunkService from "../../services/chunks";
 import { useAppDispatch } from "../../hook";
 import { createNewChunk } from "../../reducer/data-reducer";
 
+// AI:n luoman chunkin tyyppi
 type AiChunk = { chunk: string };
 
 const CreateMultipleChunks = () => {
+    // Lomakkeen tila
     const [formData, setFormData] = useState<Partial<Chunk> | undefined>({});
+    // AI:n luomat chunkit
     const [aiChunks, setAiChunks] = useState<AiChunk[]>([]);
+    // Lataustila
     const [isLoading, setIsLoading] = useState(false);
+    // Onko chunkit generoitu
     const [hasGenerated, setHasGenerated] = useState(false);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
-    
+    // Palauttaa pääsivulle jos chunkit on generoitu mutta lista on tyhjä
     useEffect(() => {
     if (hasGenerated && aiChunks.length === 0) {
         navigate("/");
     }
     }, [aiChunks, hasGenerated, navigate]);
 
+    // Käsittelee lomakkeen kenttien muutokset
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
@@ -32,6 +41,7 @@ const CreateMultipleChunks = () => {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
+    // Lähettää tekstin AI:lle chunkkien generoimista varten
     const handlesSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!formData?.content || !formData.title) {
@@ -41,10 +51,11 @@ const CreateMultipleChunks = () => {
         setIsLoading(true);
         const result = await chunkService.createMultipleChunks(formData?.content || "");
         setAiChunks(result.chunks);
-        setHasGenerated(true); // ✅ nyt tiedetään että chunkit on luotu
+        setHasGenerated(true); // Merkitään että chunkit on generoitu
         setIsLoading(false);
     };
 
+    // Tallentaa yksittäisen AI-chunkin tietokantaan
     const handleSaveChunk = async (chunk: AiChunk) => {
         try {
             if (!formData?.title) {
@@ -56,8 +67,8 @@ const CreateMultipleChunks = () => {
                     content: chunk.chunk,
                 })
             );
-            // Optionally, you can remove the saved chunk from the list or give feedback to the user
             console.log("Chunk saved:", chunk);
+            // Poistetaan tallennettu chunk listasta
             setAiChunks((prev) => prev.filter((c) => c !== chunk));
         } catch (error) {
             console.error("Error saving chunk:", error);
@@ -67,6 +78,7 @@ const CreateMultipleChunks = () => {
   return (
     <div className="container mx-auto max-w-3xl p-6">
       {isLoading ? (
+        // Latausanimaatio
         <div role="status" className="flex mt-10 items-center justify-center"> 
             <svg aria-hidden="true" className="w-8 h-8 text-gray-200 animate-spin fill-gray-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg"> 
                 <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/> 
@@ -75,6 +87,7 @@ const CreateMultipleChunks = () => {
             <span className="sr-only">Loading...</span> 
         </div>
       ) : aiChunks.length > 0 ? (
+        // AI:n luomien chunkkien lista
         <div className="container mx-auto max-w-3xl p-6 flex flex-col">
           <h1 className="font-bold text-black justify-item justify-center flex text-xl mb-4">
             Tekoälyn luomat chunkit
@@ -83,16 +96,19 @@ const CreateMultipleChunks = () => {
             role="list"
             className="grid grid-cols-1 gap-2 divide-y-1 divide-gray-500"
           >
+            {/* Renderöidään jokainen AI-chunk */}
             {aiChunks.map((chunk: AiChunk, idx) => (
               <li
                 key={idx}
                 className="flex items-center justify-between gap-x-6 py-5 "
               >
+                {/* Chunkin sisältö */}
                 <div className="min-w-0 flex-auto flex flex-col">
                   <p className="text-sm font-semibold text-black">
                     {chunk.chunk}
                   </p>
                 </div>
+                {/* Tallennuspainike */}
                 <div className="shrink-0">
                   <Button
                     text="Tallenna"
@@ -106,11 +122,13 @@ const CreateMultipleChunks = () => {
           </ul>
         </div>
       ) : (
+        // Alkuperäinen lomake
         <form onSubmit={(e) => handlesSubmit(e)}>
           <div className="space-y-8 bg-white/5 p-8 rounded-2xl shadow-2xl">
             <div className="border-b border-white/10 pb-5 flex flex-col">
               <Header title="Luo useita chunkkeja" />
               <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                {/* Otsikko-kenttä */}
                 <DataFormInput
                   formData={formData ? formData : {}}
                   handleChange={handleChange}
@@ -121,6 +139,7 @@ const CreateMultipleChunks = () => {
                   rows={1}
                   value={formData ? formData.title : ""}
                 />
+                {/* Sisältö-kenttä (pitkä teksti) */}
                 <DataFormInput
                   formData={formData ? formData : {}}
                   handleChange={handleChange}
@@ -133,12 +152,15 @@ const CreateMultipleChunks = () => {
                 />
               </div>
             </div>
+            {/* Generoi-painike */}
             <div className="mt-2 flex items-center justify-center">
               <Button type="submit" text="Tallenna" color="green" />
             </div>
           </div>
         </form>
       )}
+      
+      {/* Peruuta-painike */}
       <div className="mt-10 flex items-center justify-center">
         <Button
           text="Peruuta"

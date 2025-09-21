@@ -1,5 +1,8 @@
+// src/components/data/data-components/dataHeaders.tsx
+// Yksinkertainen otsikkokomponentti
+
 type HeadersProps = {
-    title: string;
+    title: string; // Otsikon teksti
 }
 
 const Header = ({ title }: HeadersProps) => {

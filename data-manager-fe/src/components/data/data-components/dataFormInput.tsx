@@ -1,16 +1,19 @@
+// src/components/data/data-components/dataFormInput.tsx
+// Uudelleenkäytettävä textarea-kenttä lomakkeille
+
 import type { Chunk } from "../../../types/chunk";
 
 type DataFormInputProps = {
-  formData: Partial<Chunk>;
-  handleChange: (
+  formData: Partial<Chunk>; // Lomakkeen tila (ei käytetä tässä komponentissa)
+  handleChange: ( // Muutoksen käsittelijä
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
-  placeholder?: string;
-  name?: string;
-  text?: string;
-  label: string;
-  rows?: number;
-  value?: string;
+  placeholder?: string; // Placeholder-teksti
+  name?: string; // Kentän nimi
+  text?: string; // Ohjeteksti
+  label: string; // Kentän otsikko
+  rows?: number; // Rivien määrä
+  value?: string; // Kentän arvo
 };
 
 const DataFormInput = ({
@@ -24,11 +27,14 @@ const DataFormInput = ({
 }: DataFormInputProps) => {
   return (
     <div className="sm:col-span-6">
+      {/* Kentän otsikko */}
       <label htmlFor="content" className="block text-md font-medium text-black">
         {label}
       </label>
+      {/* Ohjeteksti */}
       <p className="font-light text-base">{text}</p>
       <div className="mt-2">
+        {/* Textarea-kenttä */}
         <textarea
           name={name}
           value={value || ""}

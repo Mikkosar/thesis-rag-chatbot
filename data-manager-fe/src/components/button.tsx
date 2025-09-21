@@ -1,8 +1,12 @@
+// src/components/button.tsx
+// Uudelleenkäytettävä Button-komponentti eri väreillä ja tyypeillä
+
+// Button-komponentin props-tyyppi
 type ButtonProps = {
-  type?: "button" | "submit" | "reset";
-  onClick?: () => void;
-  text?: string;
-  color?: string;
+  type?: "button" | "submit" | "reset"; // HTML button-tyyppi
+  onClick?: () => void; // Klikkauksen käsittelijä
+  text?: string; // Painikkeen teksti
+  color?: string; // Painikkeen väri (gray, green, red)
 };
 
 const Button = ({ type, onClick, text, color }: ButtonProps) => {
@@ -10,6 +14,7 @@ const Button = ({ type, onClick, text, color }: ButtonProps) => {
     <button
       type={type}
       className={
+        // Määritetään CSS-luokat värien perusteella
         color === "gray"
           ? `rounded-md bg-black-600 px-3 py-1.5 text-sm font-medium text-black shadow-sm hover:bg-gray-300 transition`
           : color === "green"

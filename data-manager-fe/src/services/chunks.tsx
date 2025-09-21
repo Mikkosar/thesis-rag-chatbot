@@ -1,8 +1,13 @@
+// src/services/chunks.tsx
+// API-palvelut chunk-tietojen hallintaan palvelimella
+
 import axios from "axios";
 import type { EChunk } from "../types/chunk";
 
+// Palvelimen perus-URL ympäristömuuttujasta
 const baseURL = import.meta.env.VITE_BASE_URL;
 
+// Hakee kaikki chunkit palvelimelta
 const getAllChunks = async () => {
   try {
     const res = await axios.get(`${baseURL}/chunk`);
@@ -13,6 +18,7 @@ const getAllChunks = async () => {
   }
 };
 
+// Muokkaa olemassa olevaa chunkia palvelimella
 const editChunk = async (chunkId: string, updatedData: EChunk) => {
   try {
     const res = await axios.put(`${baseURL}/chunk/${chunkId}`, updatedData);
@@ -23,6 +29,7 @@ const editChunk = async (chunkId: string, updatedData: EChunk) => {
   }
 };
 
+// Poistaa chunkin palvelimelta
 const deleteChunk = async (chunkId: string) => {
   try {
     const res = await axios.delete(`${baseURL}/chunk/${chunkId}`);
@@ -33,6 +40,7 @@ const deleteChunk = async (chunkId: string) => {
   }
 };
 
+// Luo uuden chunkin palvelimelle
 const createChunk = async (newData: EChunk) => {
   try {
     const res = await axios.post(`${baseURL}/chunk`, newData);
@@ -43,6 +51,7 @@ const createChunk = async (newData: EChunk) => {
   }
 };
 
+// Luo useita chunkeja AI:n avulla yhdestä tekstistä
 const createMultipleChunks = async (text: string) => {
   try {
     const res = await axios.post(`${baseURL}/chunk/multiple`, { text });
@@ -53,4 +62,5 @@ const createMultipleChunks = async (text: string) => {
   }
 };
 
+// Exportataan kaikki palvelufunktiot
 export default { getAllChunks, editChunk, deleteChunk, createChunk, createMultipleChunks };
