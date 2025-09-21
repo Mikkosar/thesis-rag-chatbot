@@ -1,6 +1,11 @@
-const { MongoClient } = require("mongodb");
+import { MongoClient } from "mongodb";
+import dotenv from "dotenv";
+dotenv.config();
 
-const client = new MongoClient("Oma MongoDB URI tähän");
+// Luo mongoDB vektori indeksi, jos ei ole vielä olemassa
+// Aja tämä tiedosto kerran ennen kuin yrität tehdä vektorihakua komennolla node src/config/vector-index.js
+
+const client = new MongoClient(process.env.MONGO_URI);
 
 async function run() {
   try {
@@ -23,11 +28,9 @@ async function run() {
       },
     };
 
-    // run the helper method
     const result = await collection.createSearchIndex(index);
     console.log(`New search index named ${result} is building.`);
 
-    // wait for the index to be ready to query
     console.log(
       "Polling to check if the index is ready. This may take up to a minute."
     );

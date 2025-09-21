@@ -1,6 +1,7 @@
 import express from "express";
 import routes from "./router/index";
 import cors from "cors";
+import errorHandler from "./middleware/error-handler";
 
 const createApp = () => {
   const app = express();
@@ -18,6 +19,7 @@ const createApp = () => {
     console.log(`${req.method} ${req.url}`);
     next();
   });
+  app.use(errorHandler);
 
   return app;
 };
