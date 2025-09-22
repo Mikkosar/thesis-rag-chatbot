@@ -10,7 +10,7 @@ import CreateData from "./components/data/create-data";
 import { useEffect } from "react";
 import { initializeChunks } from "./reducer/data-reducer";
 import { useAppDispatch } from "./hook";
-import StreamChat from "./components/Chat/stream-chat";
+import StreamChat from "./components/chat/stream-chat";
 import CreateMultipleChunks from "./components/data/create-multiple-chunks";
 
 function App() {
