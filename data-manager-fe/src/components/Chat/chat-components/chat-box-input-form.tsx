@@ -1,8 +1,11 @@
+// src/components/chat/chat-components/chat-box-input-form.tsx
+// Syöte-lomake chat-viestien lähettämiseen
+
 type ChatBoxInputFormProps = {
-  handleSendMessage: (e: React.FormEvent) => void;
-  input: string;
-  setInput: React.Dispatch<React.SetStateAction<string>>;
-  status: string;
+  handleSendMessage: (e: React.FormEvent) => void; // Viestin lähettämisen käsittelijä
+  input: string; // Syötekentän arvo
+  setInput: React.Dispatch<React.SetStateAction<string>>; // Syötekentän arvon asettaja
+  status: string; // Chat-tila (ready, loading, jne.)
 };
 
 const ChatBoxInputForm = ({
@@ -14,18 +17,21 @@ const ChatBoxInputForm = ({
   return (
     <div className="p-4 bg-gray-50 border-t">
       <form onSubmit={handleSendMessage} className="flex space-x-2">
+        {/* Syötekenttä */}
         <input
           className="flex-1 p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           value={input}
           placeholder="Kysele jotain..."
           onChange={(e) => setInput(e.currentTarget.value)}
-          disabled={status !== "ready"}
+          disabled={status !== "ready"} // Disabloitu jos ei valmis
         />
+        {/* Lähetys-painike */}
         <button
           type="submit"
           className="px-6 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-          disabled={!input.trim() || status !== "ready"}
+          disabled={!input.trim() || status !== "ready"} // Disabloitu jos tyhjä tai ei valmis
         >
+          {/* Lähetys-ikoni */}
           <svg
             className="w-5 h-5"
             fill="none"

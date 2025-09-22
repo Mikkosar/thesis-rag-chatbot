@@ -1,8 +1,11 @@
+// src/components/chat/chat-components/chat-box-messages.tsx
+// Chat-viestien renderöinti ja streaming-tuki
+
 import type { UIDataTypes, UIMessage, UITools } from "ai";
 
 type Props = {
-  messages: UIMessage<unknown, UIDataTypes, UITools>[];
-  status: string;
+  messages: UIMessage<unknown, UIDataTypes, UITools>[]; // AI SDK:n viestit
+  status: string; // Chat-tila
 };
 
 const ChatBoxMessages = ({ messages, status }: Props) => {
@@ -10,6 +13,7 @@ const ChatBoxMessages = ({ messages, status }: Props) => {
     <div className="flex-1 p-4 overflow-y-auto flex flex-col">
       {messages.length > 0 ? (
         <div className="space-y-4 flex-1">
+          {/* Renderöidään jokainen viesti */}
           {messages.map((message, idx) => (
             <div
               key={idx}
@@ -17,6 +21,7 @@ const ChatBoxMessages = ({ messages, status }: Props) => {
                 message.role === "user" ? "justify-end" : "justify-start"
               }`}
             >
+              {/* Viestin kupla */}
               <div
                 className={`max-w-[80%] p-3 rounded-2xl ${
                   message.role === "user"
@@ -29,7 +34,7 @@ const ChatBoxMessages = ({ messages, status }: Props) => {
                    idx === messages.length - 1 && 
                    (!message.parts || message.parts.length === 0 || 
                     !message.parts.some(part => part.type === "text" && part.text && part.text.trim())) ? (
-                    // Näytä lataussymboli tyhjässä assistant-viestissä
+                    // Näytetään latausanimaatio tyhjälle assistant-viestille
                     <div className="flex items-center space-x-2">
                       <div className="flex space-x-1">
                         <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
@@ -38,11 +43,13 @@ const ChatBoxMessages = ({ messages, status }: Props) => {
                       </div>
                     </div>
                   ) : (
-                    // Näytä normaali viesti tai streaming-teksti
+                    // Renderöidään viestin osat (streaming-tuki)
                     message.parts.map((part, idx) => {
                       switch (part.type) {
                         case "text":
                           return <p key={idx}>{part.text}</p>;
+                        default:
+                          return null;
                       }
                     })
                   )}
@@ -52,10 +59,11 @@ const ChatBoxMessages = ({ messages, status }: Props) => {
           ))}
         </div>
       ) : (
-        // Keskitetty viesti kun ei ole keskusteluja
+        // Tyhjä tila kun ei ole viestejä
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center text-gray-500 px-6">
             <div className="mb-4">
+              {/* Chat-ikoni */}
               <svg
                 className="w-12 h-12 mx-auto text-gray-400"
                 fill="none"

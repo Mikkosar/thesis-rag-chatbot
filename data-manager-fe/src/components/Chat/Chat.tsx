@@ -1,30 +1,41 @@
+// src/components/chat/Chat.tsx
+// Yksinkertainen chat-komponentti, joka käyttää bulk-vastausta (ei streamiä)
+
 import { useState } from "react";
 import type { MessageList, Message } from "../../types/chat";
 import chatApi from "../../services/chat";
 
-// Tässä on esimerkki Chat komponentista, joka käyttää bulkkivastausta
+// Tämä on esimerkki Chat-komponentista, joka käyttää bulkkivastausta
 // eikä streamiä. Tämä on yksinkertaisempi toteutus ilman reaaliaikaista päivitystä.
 
 export default function Chat() {
+  // Syötekentän arvo
   const [input, setInput] = useState("");
+  // Chat-viestien lista
   const [messages, setMessages] = useState<MessageList>([]);
 
+  // Käsittelee viestin lähettämisen
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Luodaan käyttäjän viesti
     const message: Message = {
       id: undefined,
       role: "user",
       content: input,
     };
 
+    // Lisätään viesti listaan ja tyhjennetään syöte
     const newMessages = [...messages, message];
     setMessages(newMessages);
     setInput("");
 
     try {
+      // Lähetetään viesti palvelimelle ja odotetaan vastausta
       const response: Message = await chatApi.sendMessage(newMessages);
       console.log("Received response:", response);
 
+      // Lisätään vastaus viestilistaan
       setMessages([...newMessages, response]);
     } catch (error) {
       console.error("Error sending message:", error);
@@ -35,15 +46,16 @@ export default function Chat() {
     <div className="flex items-center justify-center p-4">
       {/* Kännykän muotoinen container */}
       <div className="bg-white rounded-3xl shadow-2xl w-[600px] h-[900px] flex flex-col overflow-hidden">
-        {/* Header */}
+        {/* Chat-otsikko */}
         <div className="bg-gray-500 text-white p-4 text-center font-semibold">
           Chat AI
         </div>
 
-        {/* Keskustelu alue */}
+        {/* Viestilista */}
         <div className="flex-1 p-4 overflow-y-auto flex flex-col">
           {messages.length > 0 ? (
             <div className="space-y-4 flex-1">
+              {/* Renderöidään jokainen viesti */}
               {messages.map((message, idx) => (
                 <div
                   key={idx}
@@ -51,6 +63,7 @@ export default function Chat() {
                     message.role === "user" ? "justify-end" : "justify-start"
                   }`}
                 >
+                  {/* Viestin kupla */}
                   <div
                     className={`max-w-[80%] p-3 rounded-2xl ${
                       message.role === "user"
@@ -66,10 +79,11 @@ export default function Chat() {
               ))}
             </div>
           ) : (
-            // Keskitetty viesti kun ei ole keskusteluja
+            // Tyhjä tila kun ei ole viestejä
             <div className="flex-1 flex items-center justify-center">
               <div className="text-center text-gray-500 px-6">
                 <div className="mb-4">
+                  {/* Chat-ikoni */}
                   <svg
                     className="w-12 h-12 mx-auto text-gray-400"
                     fill="none"
@@ -93,20 +107,23 @@ export default function Chat() {
           )}
         </div>
 
-        {/* Input alue */}
+        {/* Syöte-lomake */}
         <div className="p-4 bg-gray-50 border-t">
           <form onSubmit={handleSendMessage} className="flex space-x-2">
+            {/* Syötekenttä */}
             <input
               className="flex-1 p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               value={input}
               placeholder="Kysele jotain..."
               onChange={(e) => setInput(e.currentTarget.value)}
             />
+            {/* Lähetys-painike */}
             <button
               type="submit"
               className="px-6 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
               disabled={!input.trim()}
             >
+              {/* Lähetys-ikoni */}
               <svg
                 className="w-5 h-5"
                 fill="none"

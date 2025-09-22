@@ -2,7 +2,7 @@
 // Sovelluksen pääkomponentti, joka määrittelee reitit ja navigaation
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Nav";
+import Navbar from "./components/nav";
 import DataList from "./components/data/data-list";
 import DataDetails from "./components/data/data-details";
 import EditDataForm from "./components/data/edit-data-form";
