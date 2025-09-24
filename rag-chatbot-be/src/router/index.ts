@@ -14,6 +14,6 @@ router.get("/ping", (_req, res) => {
 router.use("/chunk", chunk);
 router.use("/chat", chat);
 router.use("/user", user);
-router.use("/chatLog", chatLog);
+router.use("/chatlog", chatLog);
 
 export default router;

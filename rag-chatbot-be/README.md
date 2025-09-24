@@ -218,7 +218,7 @@ npm run vector-index
     - If the request also includes an existing `chatLogId` (and the user is authenticated), the server will append the new question and the assistant's response to the existing chat log in the database, rather than creating a new one.
     - If the user is not authenticated (no valid token), the chat response will still be streamed, but no chat log will be created or updated in the database.
 
-- `GET /api/chatLog` - Get chat logs
+- `GET /api/chatlog` - Get chat logs
     > **Note:**  
     > Authentication is required for this endpoint. You must include a valid Bearer token in the `Authorization` header to access `/api/chatLog`.
 
@@ -236,11 +236,29 @@ npm run vector-index
                     "role": "assistant",
                     "content": "Vastaus"
                 }
-            ]
-        },
+            ],
+            "userId": "...",
+            "createdAt": "2025-09-24T10:07:19.412Z",
+            "id": "..."
+        }
     ...
     ]
     ```
+- `GET /api/chatlog/:id` - Delete chat log
+    > **How does deleting a chat log work?**  
+    > To delete a chat log, send a `DELETE` request to `/api/chatLog/:id`, where `:id` is the ID of the chat log you want to remove.  
+    > 
+    > - **Authentication is required:** You must include a valid Bearer token in the `Authorization` header.  
+    > - The server will verify that the chat log belongs to the authenticated user before deleting it.  
+    > - If the deletion is successful, the server responds with a confirmation message:
+    >     ```json
+    >     {
+    >         "message": "Chat log deleted successfully"
+    >     }
+    >     ```
+    > - If the chat log does not exist or does not belong to the user, an error will be returned.
+
+
 ### **Data Management**
 - `POST /api/chunk` - Create chunks for RAG
     ```json
@@ -321,15 +339,6 @@ To adapt the chatbot for your own educational institution:
 - Documents are chunked and embedded using OpenAI embeddings
 - Vector index: `vector_index` on `embedding` field
 - Search configuration: 10 candidates, 5 results limit
-
-## Data Management and Chatbot Testing
-
-You can manage the information available to the chatbot using the provided web interface (see repository link). This interface allows you to add, edit, or remove the knowledge base content that the chatbot uses to answer questions. 
-
-You can also use the same interface to test the chatbot in real time.
-
-Data Manager: https://github.com/Mikkosar/thesis-rag-chatbot-for-ed-data-manager.git
-
 
 ## 🧪 Development
 

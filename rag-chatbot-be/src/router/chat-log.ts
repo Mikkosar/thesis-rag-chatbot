@@ -2,7 +2,6 @@ import { verifyToken } from "@/middleware/auth";
 import ChatLog from "../models/chat-log";
 import express, { NextFunction, Request, Response } from "express";
 import { assert } from "@/utils/assert";
-import CustomError from "@/types/custom-error";
 
 const router = express.Router();
 
@@ -40,9 +39,7 @@ router.delete(
       const chatLogToDelete = await ChatLog.findById(id);
       assert(chatLogToDelete, 401, "Chat log not found");
 
-      if (req.user.id !== chatLogToDelete.userId.toString()) {
-        next(new CustomError(401, "Unauthorized"));
-      }
+      assert(req.user.id === chatLogToDelete.userId.toString(), 401, "Unauthorized");
 
       // Poistetaan chat-logi
       const deletedChatLog = await ChatLog.findByIdAndDelete(id);
@@ -55,7 +52,7 @@ router.delete(
       }
     } catch (error) {
       console.error("Error deleting chat log:", error);
-      next(new CustomError(500, "Internal Server Error"));
+      return next(error);
     }
   }
 );
