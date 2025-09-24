@@ -30,7 +30,7 @@ export default function StreamChat() {
     transport: new DefaultChatTransport({
       api: `${baseURL}/chat/stream`, // Stream-endpoint
       headers: {
-        //authorization: `Bearer ...`, // Autentikointi (ei käytössä)
+        // authorization: `Bearer ...`, // Autentikointi (ei käytössä)
       },
       body: () => ({
         chatLogId: chatLogIdRef.current, // Lähetetään aina tuore chatLogId
