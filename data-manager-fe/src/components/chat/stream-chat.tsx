@@ -57,9 +57,9 @@ export default function StreamChat() {
   };
 
   return (
-    <div className="flex items-center justify-center p-4">
+    <div className="flex items-center justify-center px-4 sm:px-6 lg:px-8 py-4">
       {/* Kännykän muotoinen chat-container */}
-      <div className="bg-white rounded-3xl shadow-2xl w-[600px] h-[900px] flex flex-col overflow-hidden">
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-[600px] h-[80vh] md:h-[85vh] lg:h-[900px] flex flex-col overflow-hidden">
         {/* Chat-otsikko */}
         <ChatBoXTopBar />
         {/* Viestilista */}

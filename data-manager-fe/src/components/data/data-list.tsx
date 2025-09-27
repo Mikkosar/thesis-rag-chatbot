@@ -24,7 +24,7 @@ export default function DataList() {
   };
 
   return (
-    <div className="container mx-auto max-w-3xl p-6 flex flex-col">
+    <div className="container mx-auto w-full max-w-screen-lg px-4 sm:px-6 lg:px-8 py-6 flex flex-col">
       {/* Sivun otsikko */}
       <h1 className="font-bold text-black justify-item justify-center flex text-xl mb-4">
         Chunkit tietokannassa
@@ -39,13 +39,13 @@ export default function DataList() {
       {chunks && uniqueTitles ? (
         <ul
           role="list"
-          className="grid grid-cols-1 gap-2 divide-y-1 divide-gray-500"
+          className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6"
         >
           {/* Renderöidään jokainen uniikki otsikko */}
           {uniqueTitles.map((title: string, idx) => (
             <li
               key={idx}
-              className="flex items-center justify-between gap-x-6 py-5 "
+              className="flex items-center justify-between gap-x-6 p-4 rounded-xl shadow-lg"
             >
               {/* Otsikko */}
               <div className="min-w-0 flex-auto flex flex-col">

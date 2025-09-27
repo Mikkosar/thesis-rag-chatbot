@@ -63,11 +63,11 @@ export default function DataForm() {
   };
 
   return (
-    <div className="container mx-auto max-w-3xl p-6">
+    <div className="container mx-auto w-full max-w-screen-lg px-4 sm:px-6 lg:px-8 py-6">
       {formData ? (
         <form onSubmit={handleSubmit}>
           <div className="space-y-12">
-            <div className="space-y-8 bg-white/5 p-8 rounded-2xl shadow-2xl">
+            <div className="space-y-8 bg-white/5 p-6 sm:p-8 rounded-2xl shadow-2xl">
               <div className="border-b border-white/10 pb-5 flex flex-col">
                 {/* Lomakkeen otsikko */}
                 <Header title="Muokkaus" />

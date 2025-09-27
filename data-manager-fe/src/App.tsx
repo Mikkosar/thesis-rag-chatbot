@@ -25,7 +25,7 @@ function App() {
     <Router>
       {/* Navigaatiopalkki joka näkyy kaikilla sivuilla */}
       <Navbar />
-      <div className="p-6">
+      <div className="px-4 sm:px-6 lg:px-8 py-6 max-w-screen-xl mx-auto w-full">
         {/* Reittien määrittely */}
         <Routes>
           <Route path="/" element={<DataList />} /> {/* Pääsivu: chunk-lista */}
