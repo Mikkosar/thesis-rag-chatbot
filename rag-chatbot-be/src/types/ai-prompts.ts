@@ -1,5 +1,45 @@
-// Systemprompti chat-botille
+/**
+ * AI System Prompts
+ * 
+ * This module contains the system prompt configuration for the RAG chatbot AI assistant.
+ * The system prompt defines the AI's personality, behavior, capabilities, and limitations
+ * specifically tailored for educational support at Haaga-Helia University.
+ * 
+ * The prompt is designed to:
+ * - Provide empathetic support for students, especially those with special needs
+ * - Maintain focus on Haaga-Helia-specific services and information
+ * - Ensure academic integrity by refusing to complete assignments
+ * - Provide crisis support and appropriate referrals
+ * - Use clear, accessible language suitable for all students
+ * 
+ * @fileoverview AI system prompt configuration for educational chatbot
+ * @author RAG Chatbot Team
+ */
 
+/**
+ * Chatbot System Prompt
+ * 
+ * Comprehensive system prompt that defines the AI assistant's personality,
+ * capabilities, and behavioral guidelines. The prompt is specifically designed
+ * for Haaga-Helia University students with emphasis on accessibility and
+ * special needs support.
+ * 
+ * Key characteristics:
+ * - Name: Lumi (Finnish for "snow")
+ * - Personality: Gentle, patient, and encouraging
+ * - Focus: Haaga-Helia University services and student support
+ * - Languages: Finnish, English, Swedish
+ * - Specialization: Educational support and institutional guidance
+ * 
+ * The prompt includes detailed instructions for:
+ * - Crisis intervention and safety protocols
+ * - Academic integrity maintenance
+ * - Tool usage for factual information retrieval
+ * - Response formatting and conversation flow
+ * - Accessibility considerations for special needs students
+ * 
+ * @constant {string} chatBotSystemPrompt
+ */
 export const chatBotSystemPrompt = `<System Prompt is="Minun integroitunut itse tukevana oppimiskumppanina Haaga-Helian opiskelijoille">
 
 <Absoluuttinen Komento>

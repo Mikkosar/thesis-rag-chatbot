@@ -1,3 +1,21 @@
+/**
+ * Chat Router
+ * 
+ * This module handles chat functionality for the RAG chatbot system, providing
+ * both streaming and non-streaming chat endpoints. It integrates with the AI
+ * model to generate responses and manages chat log persistence for authenticated users.
+ * 
+ * Endpoints:
+ * - POST /api/chat - Non-streaming chat with AI model
+ * - POST /api/chat/stream - Real-time streaming chat with AI model
+ * 
+ * Both endpoints support optional authentication and automatically save
+ * conversation history for authenticated users.
+ * 
+ * @fileoverview Chat functionality and AI integration API endpoints
+ * @author RAG Chatbot Team
+ */
+
 import express, { NextFunction, Request, Response } from "express";
 import "dotenv/config";
 import {
@@ -19,6 +37,43 @@ import { MessageStream } from "@/types/message-stream";
 
 const router = express.Router();
 
+/**
+ * Non-Streaming Chat Endpoint
+ * 
+ * Processes chat messages and returns a complete AI response. This endpoint
+ * is suitable for applications that don't require real-time streaming but
+ * want to maintain conversation history for authenticated users.
+ * 
+ * @route POST /api/chat
+ * @param {IChatMessages} messages - Array of chat messages
+ * @param {string} [chatLogId] - Optional existing chat log ID to append to
+ * @returns {Object} Complete chat response
+ * @returns {IChatMessages} messages - AI assistant's response messages
+ * @returns {string} [chatLogId] - Chat log ID for conversation persistence
+ * 
+ * @example
+ * // Request body
+ * {
+ *   "messages": [
+ *     {
+ *       "role": "user",
+ *       "content": "I need help with my studies"
+ *     }
+ *   ],
+ *   "chatLogId": "optional-existing-log-id"
+ * }
+ * 
+ * // Response
+ * {
+ *   "messages": [
+ *     {
+ *       "role": "assistant",
+ *       "content": "I'd be happy to help you with your studies..."
+ *     }
+ *   ],
+ *   "chatLogId": "new-or-existing-log-id"
+ * }
+ */
 router.post(
   "/",
   optionalVerifyToken,
@@ -29,17 +84,17 @@ router.post(
         chatLogId,
       }: { messages: IChatMessages; chatLogId: string } = req.body;
 
-      // Tarkistetaan, että viestit on annettu
+      // Validate that messages are provided
       assert(messages && messages.length > 0, 400, "Messages are required");
 
-      // Luodaan globaali muuttuja finalChatLogId, jota voidaan muokata
+      // Initialize chat log ID variable that can be modified
       let finalChatLogId = chatLogId || undefined;
 
-      // Haetaan mallin vastaus
+      // Get AI model response
       const assistantResponse = await getModelResponse(messages);
       assert(res, 500, "Failed to get response from AI");
 
-      // Tallennetaan chatlogi, jos käyttäjä on kirjautunut
+      // Save chat log if user is authenticated
       if (req.user) {
         finalChatLogId = await saveChatLog(
           chatLogId,
@@ -49,7 +104,7 @@ router.post(
         );
       }
 
-      // Palautetaan vastaus ja chatLogId (jos olemassa tai luotu)
+      // Return response and chat log ID (if exists or created)
       return res.json({
         messages: assistantResponse,
         chatLogId: finalChatLogId,
@@ -60,6 +115,40 @@ router.post(
   }
 );
 
+/**
+ * Streaming Chat Endpoint
+ * 
+ * Provides real-time streaming chat functionality using the AI SDK's streaming
+ * capabilities. This endpoint streams the AI response as it's generated, providing
+ * a more interactive user experience. Chat logs are automatically managed for
+ * authenticated users.
+ * 
+ * @route POST /api/chat/stream
+ * @param {UIMessage[]} messages - Array of UI-formatted chat messages
+ * @param {string} [chatLogId] - Optional existing chat log ID to append to
+ * @returns {Stream} Real-time streaming response with AI-generated content
+ * 
+ * @example
+ * // Request body
+ * {
+ *   "messages": [
+ *     {
+ *       "role": "user",
+ *       "id": "1",
+ *       "parts": [
+ *         {
+ *           "type": "text",
+ *           "text": "I need help with my studies"
+ *         }
+ *       ]
+ *     }
+ *   ],
+ *   "chatLogId": "optional-existing-log-id"
+ * }
+ * 
+ * // Response: Stream of data chunks containing AI response
+ * // Use AI SDK's useChat hook in frontend to handle streaming
+ */
 router.post(
   "/stream",
   optionalVerifyToken,
@@ -72,20 +161,20 @@ router.post(
 
       assert(messages && messages.length > 0, 400, "Messages are required");
 
-      // Muutetaan UIMessage-muoto chatLogiin tallennettavaksi muodoksi
+      // Convert UIMessage format to database-storable format
       const { formattedMessages, formattedLastMessage } =
         formattedMessagesForDB(messages);
       console.log("Last user message:", formattedLastMessage);
 
-      // Streamataan vastaus
+      // Stream the response using AI SDK
       pipeUIMessageStreamToResponse({
         response: res,
         stream: createUIMessageStream<MessageStream>({
           execute: async ({ writer }) => {
-            // Globaali muuttuja, jota voidaan muokata
+            // Global variable that can be modified
             let finalChatLogId = chatLogId;
 
-            // Jos käyttäjä on kirjautunut, luodaan tai päivitetään chatLogia
+            // If user is authenticated, create or update chat log
             if (req.user) {
               finalChatLogId = await createOrUpdateChatLog(
                 req.user ? req.user.id : "",
@@ -95,16 +184,17 @@ router.post(
               );
             }
 
-            // Lähetetään chatLogId clientille
+            // Send chat log ID to client
             writer.write({
               type: "data-chatLogId",
               data: { chatLogId: finalChatLogId },
             });
 
-            // Streamataan vastaus kaikissa tapauksissa
+            // Stream response in all cases
             const stream = await getStreamText(messages);
             writer.merge(stream.toUIMessageStream({ sendStart: false }));
 
+            // Update chat log with full assistant response for authenticated users
             if (req.user && finalChatLogId) {
               let fullText = "";
               for await (const textPart of stream.textStream) {
