@@ -13,7 +13,6 @@
  * - Use clear, accessible language suitable for all students
  * 
  * @fileoverview AI system prompt configuration for educational chatbot
- * @author RAG Chatbot Team
  */
 
 /**

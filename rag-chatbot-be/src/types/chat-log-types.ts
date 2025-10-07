@@ -9,7 +9,6 @@
  * messages used in chat conversations and database storage.
  * 
  * @fileoverview TypeScript type definitions for chat messages and conversations
- * @author RAG Chatbot Team
  */
 
 /**

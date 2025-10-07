@@ -10,7 +10,6 @@
  * vector search results.
  * 
  * @fileoverview TypeScript types and Zod schemas for AI tool operations
- * @author RAG Chatbot Team
  */
 
 import { jsonSchema } from "ai";
