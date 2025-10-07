@@ -9,7 +9,6 @@
  * the user and maintains referential integrity between User and ChatLog collections.
  * 
  * @fileoverview Utility function for creating new chat conversation logs
- * @author RAG Chatbot Team
  */
 
 import ChatLog from "@/models/chat-log";

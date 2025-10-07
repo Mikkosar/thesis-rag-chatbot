@@ -9,7 +9,6 @@
  * returns ranked, deduplicated results based on semantic similarity scores.
  * 
  * @fileoverview MongoDB Atlas Vector Search service for semantic information retrieval
- * @author RAG Chatbot Team
  */
 
 import { getMultipleEmbeddings } from "./embedding";

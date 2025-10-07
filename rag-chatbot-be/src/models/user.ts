@@ -9,7 +9,6 @@
  * and references to chat logs for maintaining conversation history.
  * 
  * @fileoverview User data model and schema definition
- * @author RAG Chatbot Team
  */
 
 import mongoose, { Document, Model } from "mongoose";

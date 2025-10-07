@@ -9,7 +9,6 @@
  * size limits, making them suitable for embedding generation and vector search.
  * 
  * @fileoverview AI-powered document chunking service for knowledge base management
- * @author RAG Chatbot Team
  */
 
 import { assert } from "@/utils/assert";

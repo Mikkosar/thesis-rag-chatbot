@@ -13,7 +13,6 @@
  * conversation history for authenticated users.
  * 
  * @fileoverview Chat functionality and AI integration API endpoints
- * @author RAG Chatbot Team
  */
 
 import express, { NextFunction, Request, Response } from "express";

@@ -9,7 +9,6 @@
  * a unified way to validate conditions and throw appropriate errors.
  * 
  * @fileoverview Custom assertion function with HTTP status code support
- * @author RAG Chatbot Team
  */
 
 import CustomError from "@/types/custom-error";

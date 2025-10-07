@@ -9,7 +9,6 @@
  * schemas for vector search operations using MongoDB Atlas Vector Search.
  * 
  * @fileoverview TypeScript types and Zod schemas for vector search operations
- * @author RAG Chatbot Team
  */
 
 import z from "zod";

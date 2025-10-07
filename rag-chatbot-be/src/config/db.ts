@@ -5,7 +5,6 @@
  * It establishes the connection to MongoDB Atlas and handles connection errors.
  * 
  * @fileoverview MongoDB connection configuration and initialization
- * @author RAG Chatbot Team
  */
 
 import mongoose from "mongoose";

@@ -10,7 +10,6 @@
  * for each message exchange.
  * 
  * @fileoverview Utility function for updating existing chat conversation logs
- * @author RAG Chatbot Team
  */
 
 import ChatLog from "@/models/chat-log";

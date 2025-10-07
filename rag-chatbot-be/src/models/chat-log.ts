@@ -9,7 +9,6 @@
  * and maintains relationships to the user who initiated the conversation.
  * 
  * @fileoverview Chat conversation history data model and schema definition
- * @author RAG Chatbot Team
  */
 
 import { IMessage } from "@/types/chat-log-types";

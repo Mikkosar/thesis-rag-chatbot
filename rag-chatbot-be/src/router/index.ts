@@ -13,7 +13,6 @@
  * - Knowledge base chunk management routes (/chunk)
  * 
  * @fileoverview Central API router configuration and route mounting
- * @author RAG Chatbot Team
  */
 
 import chunk from "./chunk";

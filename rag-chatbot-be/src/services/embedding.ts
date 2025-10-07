@@ -9,7 +9,6 @@
  * for multiple texts, which is essential for efficient vector search operations.
  * 
  * @fileoverview OpenAI embedding generation service for semantic search
- * @author RAG Chatbot Team
  */
 
 import { assert } from "@/utils/assert";

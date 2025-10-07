@@ -9,7 +9,6 @@
  * while maintaining chat log persistence for authenticated users.
  * 
  * @fileoverview TypeScript types for streaming chat messages with metadata
- * @author RAG Chatbot Team
  */
 
 import { UIMessage } from "ai";

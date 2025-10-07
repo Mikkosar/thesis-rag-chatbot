@@ -10,7 +10,6 @@
  * - POST /api/user/register - New user registration with password hashing
  * 
  * @fileoverview User authentication and registration API endpoints
- * @author RAG Chatbot Team
  */
 
 import User from "../models/user";

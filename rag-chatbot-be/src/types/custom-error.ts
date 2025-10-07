@@ -9,7 +9,6 @@
  * provide consistent error responses with appropriate HTTP status codes.
  * 
  * @fileoverview Custom error class with HTTP status code support
- * @author RAG Chatbot Team
  */
 
 /**

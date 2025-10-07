@@ -12,7 +12,6 @@
  * - Generic server errors
  * 
  * @fileoverview Centralized error handling and response formatting
- * @author RAG Chatbot Team
  */
 
 import CustomError from "@/types/custom-error";

@@ -9,7 +9,6 @@
  * the chatbot to retrieve relevant information based on user queries.
  * 
  * @fileoverview Knowledge base chunk data model and schema definition
- * @author RAG Chatbot Team
  */
 
 import mongoose from "mongoose";
