@@ -152,6 +152,31 @@ npm run vector-index
 ### **Chat Endpoints**
 > **Note!** If you want to take advantage of the real-time chat streaming feature (`POST /api/chat/stream`), I recommend using the [AI SDK](https://sdk.vercel.ai/docs/api-reference/use-chat) `useChat` hook in your frontend. This allows you to receive and display messages to the user in real time, providing a better user experience compared to the traditional non-streaming endpoint (`POST /api/chat`).
 
+## 🧩 Chat Flowchart
+
+```mermaid
+flowchart TD
+
+A[Start] --> B[User sends message to /stream route]
+
+B --> C{Messages exist?}
+C -->|No| E[Return error: 'Messages are required']
+C -->|Yes| F[Format messages for database]
+
+F --> G[Initialize stream]
+G --> H{User authenticated?}
+
+H -->|No| I[Skip chat log creation]
+H -->|Yes| M[Create or Update ChatLog]
+
+M --> J
+
+I --> J[Call Streamtext]
+J --> K[Stream Resonse]
+K --> N[Save Resonse and update ChatLog if authenticated]
+N --> L[END]
+
+```
 - `POST /api/chat/stream` - Stream chat responses (real-time)
     ```json
     {
@@ -171,6 +196,7 @@ npm run vector-index
     }
     ```
     The `/api/chat/stream` endpoint enables real-time streaming of chat responses. When you send a request to this endpoint, the server streams the assistant's reply back to the client as it is generated, allowing for a more interactive and responsive chat experience. This is especially useful for frontend applications that want to display the assistant's answer incrementally, as it is being produced.
+    
 
     **Authentication and Chat Log Handling:**
 
